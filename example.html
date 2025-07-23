@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Calendar Example</title>
+    <link rel="stylesheet" href="github-calendar.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f6f8fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #24292f;
+            margin-bottom: 40px;
+        }
+        
+        .example-section {
+            margin-bottom: 60px;
+        }
+        
+        .example-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #24292f;
+        }
+        
+        .code-block {
+            background: #f6f8fa;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+            font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .calendar-container {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GitHub Contributions Calendar Library</h1>
+        
+        <div class="example-section">
+            <div class="example-title">Basic Usage</div>
+            <p>Include the CSS and JavaScript files, then initialize the calendar:</p>
+            
+            <div class="code-block">
+  <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/github-calendar.min.css">
+  <div class="calendar"></div>
+  <script src="https://webdesignerk.com/g-calendar/github-calendar.min.js"></script>
+  <script>
+    GitHubCalendar(".calendar", "konstantinWDK", {
+      proxy: "https://webdesignerk.com/g-calendar/github-proxy.php"
+    });
+  </script>
+
+            </div>
+            
+            <div class="calendar-container">
+                <div class="calendar-basic"></div>
+            </div>
+        </div>
+        
+        <div class="example-section">
+            <div class="example-title">With Custom Options</div>
+            <div class="code-block">
+&lt;script&gt;
+  GitHubCalendar(".calendar-custom", "konstantinWDK", {
+    responsive: true,
+    tooltips: true,
+    summary_text: 'contributions in the last year',
+    global_stats: true
+  });
+&lt;/script&gt;
+            </div>
+            
+            <div class="calendar-container">
+                <div class="calendar-custom"></div>
+            </div>
+        </div>
+        
+        <div class="example-section">
+            <div class="example-title">Hosting on webdesignerk.com (carpeta g-calenda)</div>
+            <div class="code-block">
+&lt;!-- Para usar desde tu servidor --&gt;
+&lt;link rel="stylesheet" href="https://webdesignerk.com/g-calenda/github-calendar.min.css"&gt;
+&lt;div class="calendar"&gt;&lt;/div&gt;
+&lt;script src="https://webdesignerk.com/g-calenda/github-calendar.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  GitHubCalendar(".calendar", "konstantinWDK", {
+    proxy: "https://webdesignerk.com/g-calenda/github-proxy.php"
+  });
+&lt;/script&gt;
+            </div>
+        </div>
+        
+        <div class="example-section">
+            <div class="example-title">Available Options</div>
+            <div class="code-block">
+{
+  responsive: true,        // Enable responsive design
+  tooltips: true,         // Show tooltips on hover
+  summary_text: 'contributions in the last year',  // Summary text
+  proxy: '',              // Proxy URL (if needed)
+  global_stats: true,     // Show total contributions
+  cache: true            // Enable caching
+}
+            </div>
+        </div>
+        
+        <div class="example-section">
+            <div class="example-title">API Methods</div>
+            <div class="code-block">
+var calendar = GitHubCalendar(".calendar", "username");
+
+// Reload the calendar
+calendar.reload();
+
+// Destroy the calendar
+calendar.destroy();
+            </div>
+        </div>
+    </div>
+
+    <script src="github-calendar.js"></script>
+    <script>
+        // Initialize examples
+        GitHubCalendar(".calendar-basic", "konstantinWDK");
+        
+        GitHubCalendar(".calendar-custom", "konstantinWDK", {
+            responsive: true,
+            tooltips: true,
+            summary_text: 'contributions in the last year',
+            global_stats: true
+        });
+    </script>
+</body>
+</html>

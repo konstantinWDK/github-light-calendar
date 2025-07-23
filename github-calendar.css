@@ -1,0 +1,137 @@
+.github-calendar {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  color: #24292f;
+  font-size: 14px;
+}
+
+.github-calendar-graph {
+  text-align: center;
+}
+
+.github-calendar-graph-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #24292f;
+}
+
+.github-calendar-graph-container {
+  display: inline-block;
+  text-align: left;
+}
+
+.github-calendar-graph-svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.github-calendar-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #656d76;
+}
+
+.github-calendar-legend-text {
+  margin-right: 8px;
+}
+
+.github-calendar-legend-squares {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.github-calendar-square {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.github-calendar-square-0 {
+  background-color: #ebedf0;
+}
+
+.github-calendar-square-1 {
+  background-color: #9be9a8;
+}
+
+.github-calendar-square-2 {
+  background-color: #40c463;
+}
+
+.github-calendar-square-3 {
+  background-color: #30a14e;
+}
+
+.github-calendar-square-4 {
+  background-color: #216e39;
+}
+
+.github-calendar-day {
+  cursor: pointer;
+}
+
+.github-calendar-day:hover {
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.github-calendar-tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.github-calendar-loading {
+  text-align: center;
+  padding: 40px;
+  color: #656d76;
+}
+
+.github-calendar-error {
+  text-align: center;
+  padding: 40px;
+  color: #d1242f;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .github-calendar-graph-svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .github-calendar-legend {
+    font-size: 10px;
+  }
+  
+  .github-calendar-square {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .github-calendar-graph-title {
+    font-size: 14px;
+  }
+  
+  .github-calendar-legend {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .github-calendar-square {
+    width: 6px;
+    height: 6px;
+  }
+}
