@@ -4,9 +4,17 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
-if (!isset($_GET['username'])) {
+// Debug: Log received parameters
+error_log("GET parameters: " . print_r($_GET, true));
+error_log("Raw query string: " . $_SERVER['QUERY_STRING'] ?? 'none');
+
+if (!isset($_GET['username']) || empty($_GET['username'])) {
     http_response_code(400);
-    echo json_encode(['error' => 'Username required']);
+    echo json_encode([
+        'error' => 'Username required', 
+        'received_params' => $_GET,
+        'query_string' => $_SERVER['QUERY_STRING'] ?? 'none'
+    ]);
     exit;
 }
 
@@ -98,6 +106,7 @@ function fetchGitHubAPI($url) {
     
     if ($httpCode !== 200) {
         error_log("GitHub API Error: HTTP " . $httpCode . " for URL: " . $url);
+        error_log("Response: " . $response);
         return false;
     }
     
