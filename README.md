@@ -1,80 +1,176 @@
-# GitHub Calendar Widget
+# GitHub Light Calendar
 
-A lightweight, responsive JavaScript library that allows you to embed GitHub-style contribution calendars into any website. Display your coding activity with the same visual appeal as GitHub profiles, complete with interactive tooltips, customizable themes, and mobile-friendly design. Perfect for portfolios, developer blogs, and showcasing your open-source contributions.
+A lightweight, customizable GitHub contributions calendar widget that can be easily embedded into any website.
 
-## Features
+## 📁 Project Structure
 
-- 📊 Display GitHub contribution graphs anywhere
-- 🎨 Customizable styling and themes
-- 📱 Responsive design support
-- 🛠️ Easy integration with any website
-- 🔄 CORS proxy support for client-side requests
-- 💾 Caching support for better performance
+```
+github-light-calendar/
+├── src/                    # Source JavaScript files
+│   └── github-calendar.js  # Main library file
+├── css/                    # Stylesheets
+│   └── github-calendar.css # Calendar styles
+├── server/                 # Backend proxy
+│   └── github-proxy.php    # GitHub API proxy
+├── config/                 # Configuration files
+│   ├── config.php          # Your private config (gitignored)
+│   └── config.example.php  # Example configuration
+├── examples/              # Usage examples
+│   ├── example.html       # Local development example
+│   └── cdn-example.html   # CDN usage example
+├── docs/                  # Documentation
+│   └── SETUP.md          # Setup instructions
+├── cache/                 # Auto-generated cache (gitignored)
+└── README.md             # This file
+```
 
-## Quick Start
+## ✨ Features
 
-### CDN Usage
+- 🎨 Lightweight and customizable
+- 📱 Responsive design
+- 🔄 Automatic caching (1 hour)
+- 🛡️ Rate limit protection with fallback
+- 🌐 CDN ready
+- 🔒 Secure token management
+
+## 🚀 Quick Start
+
+### CDN Usage (Recommended)
+```html
+<link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
+<div id="calendar"></div>
+<script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
+<script>
+GitHubCalendar('#calendar', 'your-username', {
+    proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php'
+});
+</script>
+```
+
+### Local Development
+```html
+<link rel="stylesheet" href="css/github-calendar.css">
+<div id="calendar"></div>
+<script src="src/github-calendar.js"></script>
+<script>
+GitHubCalendar('#calendar', 'your-username', {
+    proxy: 'server/github-proxy.php'
+});
+</script>
+```
+
+### 📋 Live Example
 
 ```html
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
+</head>
+<body>
+    <div id="github-calendar"></div>
+    
+    <script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
+    <script>
+        GitHubCalendar('#github-calendar', 'KonstantinWDK', {
+            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
+            responsive: true,
+            tooltips: true
+        });
+    </script>
+</body>
+</html>
+```
+
+## 🔄 Migration from Previous Version
+
+**OLD CDN URLs (deprecated):**
+```html
+<!-- ❌ OLD - Don't use these anymore -->
 <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/github-calendar.min.css">
-<div class="calendar"></div>
 <script src="https://webdesignerk.com/g-calendar/github-calendar.min.js"></script>
 <script>
-  GitHubCalendar(".calendar", "your-username", {
-    proxy: "https://webdesignerk.com/g-calendar/github-proxy.php"
-  });
+GitHubCalendar('#calendar', 'username', {
+    proxy: 'https://webdesignerk.com/g-calendar/github-proxy.php'
+});
 </script>
 ```
 
-### Local Installation
-
-1. Download the files:
-   - `github-calendar.min.css`
-   - `github-calendar.min.js`
-   - `github-proxy.php` (optional, for CORS handling)
-
-2. Include them in your HTML:
-
+**NEW CDN URLs (current):**
 ```html
-<link rel="stylesheet" href="path/to/github-calendar.min.css">
-<div class="calendar"></div>
-<script src="path/to/github-calendar.min.js"></script>
+<!-- ✅ NEW - Use these instead -->
+<link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
+<script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
 <script>
-  GitHubCalendar(".calendar", "your-username");
+GitHubCalendar('#calendar', 'username', {
+    proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php'
+});
 </script>
 ```
 
-## Configuration Options
+### Changes Made:
+- `github-calendar.min.css` → `css/github-calendar.css`
+- `github-calendar.min.js` → `src/github-calendar.js`  
+- `github-proxy.php` → `server/github-proxy.php`
+
+## ⚙️ Configuration
+
+1. Copy `config/config.example.php` to `config/config.php`
+2. Add your GitHub token (optional but recommended):
+   ```php
+   define('GITHUB_TOKEN', 'your_github_token_here');
+   ```
+
+### Configuration Options
 
 ```javascript
-GitHubCalendar(".calendar", "username", {
+GitHubCalendar('#calendar', 'username', {
   responsive: true,           // Enable responsive design
   tooltips: true,            // Show tooltips on hover
   summary_text: 'contributions in the last year',  // Custom summary text
-  proxy: '',                 // Proxy URL for CORS handling
+  proxy: '',                 // Proxy URL for CORS handling (REQUIRED)
   global_stats: true,        // Show total contributions count
   cache: true               // Enable caching
 });
 ```
 
-### Parameters
+### 📋 Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `selector` | String/Element | CSS selector or DOM element |
-| `username` | String | GitHub username |
-| `options` | Object | Configuration options (optional) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `selector` | String/Element | ✅ Yes | CSS selector (`#id` or `.class`) or DOM element |
+| `username` | String | ✅ Yes | GitHub username (case-sensitive) |
+| `options` | Object | ❌ No | Configuration options |
 
-### Available Options
+### 🔧 Available Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `responsive` | Boolean | `true` | Enable responsive design |
-| `tooltips` | Boolean | `true` | Show tooltips on hover |
-| `summary_text` | String | `'contributions in the last year'` | Summary text |
-| `global_stats` | Boolean | `true` | Show total contributions |
-| `cache` | Boolean | `true` | Enable caching |
-| `proxy` | String | `''` | Proxy URL (if needed) |
+| Option | Type | Default | Required | Description |
+|--------|------|---------|----------|-------------|
+| `responsive` | Boolean | `true` | ❌ | Enable responsive design |
+| `tooltips` | Boolean | `true` | ❌ | Show interactive tooltips on hover |
+| `summary_text` | String | `'contributions in the last year'` | ❌ | Custom summary text |
+| `global_stats` | Boolean | `true` | ❌ | Show total contributions count |
+| `cache` | Boolean | `true` | ❌ | Enable data caching |
+| `proxy` | String | `''` | ✅ **Yes** | Proxy URL (required for production) |
+
+### 💡 Usage Examples
+
+```javascript
+// Basic usage
+GitHubCalendar('#calendar', 'KonstantinWDK');
+
+// With custom options
+GitHubCalendar('#calendar', 'KonstantinWDK', {
+  proxy: 'https://your-domain.com/server/github-proxy.php',
+  summary_text: 'commits this year',
+  tooltips: true,
+  responsive: true
+});
+
+// Multiple calendars
+GitHubCalendar('#calendar1', 'user1', { proxy: 'server/github-proxy.php' });
+GitHubCalendar('#calendar2', 'user2', { proxy: 'server/github-proxy.php' });
+```
 
 ## API Methods
 
@@ -89,67 +185,120 @@ calendar.reload();
 calendar.destroy();
 ```
 
-## CORS Proxy
+## 📊 API Limits
 
-Due to CORS restrictions, you may need to use a proxy when making requests to GitHub's API from the browser. The included `github-proxy.php` file provides a simple PHP proxy solution.
+- **Without token**: 60 requests/hour
+- **With token**: 5,000 requests/hour
+- **Automatic cache**: Reduces API calls significantly
 
-### Setting up the proxy:
+## 🔍 Testing the proxy
 
-1. Upload `github-proxy.php` to your server
-2. Configure the proxy URL in your options:
+Test your proxy by visiting: `https://webdesignerk.com/g-calendar/server/github-proxy.php?username=KonstantinWDK`
 
-```javascript
-GitHubCalendar(".calendar", "username", {
-  proxy: "https://your-domain.com/path/to/github-proxy.php"
-});
-```
+You should see JSON data with contribution information.
 
-## Styling
+## 📖 Documentation
+
+- [Setup Guide](docs/SETUP.md) - Detailed setup instructions
+- [Examples](examples/) - Working examples
+
+## 🎨 Custom Styling
 
 The calendar uses CSS classes that you can customize:
 
 ```css
-.calendar {
+.github-calendar {
   /* Main calendar container */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.js-calendar-graph-svg {
+.github-calendar-graph-svg {
   /* SVG container */
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
 }
 
-.ContributionCalendar-day {
+.github-calendar-day {
   /* Individual day squares */
+  cursor: pointer;
+}
+
+.github-calendar-square-0 { fill: #ebedf0; }
+.github-calendar-square-1 { fill: #9be9a8; }
+.github-calendar-square-2 { fill: #40c463; }
+.github-calendar-square-3 { fill: #30a14e; }
+.github-calendar-square-4 { fill: #216e39; }
+
+.github-calendar-tooltip {
+  /* Tooltip styling */
+  background: #2d3748;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
 }
 ```
 
-## Browser Support
+## 🛠️ Troubleshooting
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Internet Explorer 11+
+### Common Issues:
 
-## Examples
+**❌ Calendar not showing:**
+- Check if `id` matches selector (`#calendar` needs `id="calendar"`)
+- Verify proxy URL is accessible
+- Check browser console for errors
 
-Check out `example.html` for complete working examples including:
-- Basic usage
-- Custom configuration options
-- Multiple calendar instances
-- Different styling approaches
+**❌ "Loading..." shows forever:**
+- Test proxy URL directly: `your-proxy.php?username=your-username`
+- Check server PHP version (7.0+ required)
+- Verify internet connection to GitHub API
 
-## License
+**❌ No data showing:**
+- Make sure username is correct and case-sensitive
+- Check if GitHub profile is public
+- Verify user has public contributions
 
-MIT License - feel free to use in your projects.
+**❌ CORS errors:**
+- Ensure you're using the proxy parameter
+- Check proxy is on same domain or CORS configured
 
-## Contributing
+### 🔍 Debug Mode:
 
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+```javascript
+GitHubCalendar('#calendar', 'username', {
+  proxy: 'your-proxy.php'
+}).catch(error => {
+  console.error('Calendar Error:', error);
+});
+```
 
-## Support
+## 📄 License
 
-For issues and questions, please create an issue in the repository or contact the maintainer.
+MIT License - feel free to use in your projects, both personal and commercial.
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Development Setup:
+```bash
+git clone https://github.com/konstantinWDK/github-light-calendar.git
+cd github-light-calendar
+```
+
+## 💬 Support & Community
+
+- 🐛 **Bug Reports**: [Create an issue](https://github.com/konstantinWDK/github-light-calendar/issues)
+- 💡 **Feature Requests**: [Create an issue](https://github.com/konstantinWDK/github-light-calendar/issues)
+- 📧 **Contact**: [WebDesignerK](https://webdesignerk.com)
+- 🌟 **Give us a star** if this project helped you!
+
+---
+
+Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/g-calendar/)

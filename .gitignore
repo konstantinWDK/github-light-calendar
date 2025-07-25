@@ -1,0 +1,31 @@
+# Configuration files with sensitive data
+config/config.php
+
+# Cache directory
+cache/
+*.cache
+
+.claude/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+error.log
+
+# Temporary files
+*.tmp
+*.temp

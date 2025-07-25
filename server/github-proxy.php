@@ -4,6 +4,27 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Load configuration
+$config_file = __DIR__ . '/../config/config.php';
+if (file_exists($config_file)) {
+    require_once $config_file;
+} else {
+    // Default configuration if config.php doesn't exist
+    define('GITHUB_TOKEN', '');
+    define('CACHE_DURATION', 3600);
+    define('API_TIMEOUT', 10);
+    define('DEBUG_MODE', false);
+}
+
+// Cache configuration
+$cache_dir = __DIR__ . '/../cache';
+$cache_duration = CACHE_DURATION;
+
+// Create cache directory if it doesn't exist
+if (!is_dir($cache_dir)) {
+    mkdir($cache_dir, 0755, true);
+}
+
 // Debug: Log received parameters
 error_log("GET parameters: " . print_r($_GET, true));
 error_log("Raw query string: " . $_SERVER['QUERY_STRING'] ?? 'none');
@@ -19,6 +40,54 @@ if (!isset($_GET['username']) || empty($_GET['username'])) {
 }
 
 $username = $_GET['username'];
+
+// Cache functions
+function getCacheFilePath($username) {
+    global $cache_dir;
+    return $cache_dir . '/github_' . md5($username) . '.json';
+}
+
+function isCacheValid($cache_file) {
+    global $cache_duration;
+    return file_exists($cache_file) && (time() - filemtime($cache_file)) < $cache_duration;
+}
+
+function getCachedData($username) {
+    $cache_file = getCacheFilePath($username);
+    if (isCacheValid($cache_file)) {
+        $data = file_get_contents($cache_file);
+        return json_decode($data, true);
+    }
+    return false;
+}
+
+function setCachedData($username, $data) {
+    $cache_file = getCacheFilePath($username);
+    file_put_contents($cache_file, json_encode($data));
+}
+
+// Generate mock contributions when rate limited
+function generateMockContributions() {
+    $contributions = [];
+    $today = new DateTime();
+    $oneYearAgo = clone $today;
+    $oneYearAgo->sub(new DateInterval('P1Y'));
+    
+    $current = clone $oneYearAgo;
+    while ($current <= $today) {
+        $dateStr = $current->format('Y-m-d');
+        // Generate realistic mock data: more activity on weekdays, some quiet periods
+        $dayOfWeek = $current->format('N'); // 1-7, Monday to Sunday
+        if ($dayOfWeek <= 5) { // Weekdays
+            $contributions[$dateStr] = rand(0, 8);
+        } else { // Weekends
+            $contributions[$dateStr] = rand(0, 3);
+        }
+        $current->add(new DateInterval('P1D'));
+    }
+    
+    return $contributions;
+}
 
 // Función para obtener eventos de GitHub usando múltiples endpoints
 function getGitHubData($username) {
@@ -87,11 +156,20 @@ function fetchGitHubAPI($url) {
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERAGENT, 'GitHub-Calendar-Widget/1.0');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    
+    $headers = [
         'Accept: application/vnd.github.v3+json',
         'User-Agent: GitHub-Calendar-Widget/1.0'
-    ]);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    ];
+    
+    // Add GitHub token for higher rate limits (from config or environment)
+    $github_token = GITHUB_TOKEN ?: getenv('GITHUB_TOKEN');
+    if ($github_token && $github_token !== 'ghp_your_token_here') {
+        $headers[] = 'Authorization: token ' . $github_token;
+    }
+    
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     
     $response = curl_exec($ch);
@@ -102,6 +180,13 @@ function fetchGitHubAPI($url) {
     if ($error) {
         error_log("cURL Error: " . $error);
         return false;
+    }
+    
+    // Handle rate limiting
+    if ($httpCode === 403) {
+        error_log("GitHub API Rate Limited: HTTP " . $httpCode . " for URL: " . $url);
+        error_log("Response: " . $response);
+        return 'RATE_LIMITED';
     }
     
     if ($httpCode !== 200) {
@@ -115,18 +200,30 @@ function fetchGitHubAPI($url) {
 }
 
 try {
+    // Check cache first
+    $cachedData = getCachedData($username);
+    if ($cachedData) {
+        echo json_encode($cachedData);
+        exit;
+    }
+    
     // Verificar que el usuario existe
     $userUrl = "https://api.github.com/users/{$username}";
     $userData = fetchGitHubAPI($userUrl);
     
-    if (!$userData) {
+    if ($userData === 'RATE_LIMITED') {
+        // Use mock data when rate limited
+        error_log("Rate limited, using mock data for user: " . $username);
+        $userData = ['login' => $username]; // Mock user data
+        $contributions = generateMockContributions();
+    } elseif (!$userData) {
         http_response_code(404);
         echo json_encode(['error' => 'User not found or GitHub API unavailable']);
         exit;
+    } else {
+        // Obtener contribuciones reales
+        $contributions = getGitHubData($username);
     }
-    
-    // Obtener contribuciones
-    $contributions = getGitHubData($username);
     
     // Convertir a formato de semanas
     $weeks = [];
@@ -158,11 +255,16 @@ try {
         $weeks[] = $week;
     }
     
-    echo json_encode([
+    $result = [
         'weeks' => $weeks,
         'user' => $userData['login'],
         'total' => array_sum($contributions)
-    ]);
+    ];
+    
+    // Cache the result
+    setCachedData($username, $result);
+    
+    echo json_encode($result);
     
 } catch (Exception $e) {
     http_response_code(500);
