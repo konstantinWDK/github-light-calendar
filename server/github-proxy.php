@@ -89,8 +89,60 @@ function generateMockContributions() {
     return $contributions;
 }
 
-// Función para obtener eventos de GitHub usando múltiples endpoints
-function getGitHubData($username) {
+// Función para obtener contribuciones usando GraphQL API (incluye privadas)
+function getGitHubContributionsGraphQL($username) {
+    $github_token = GITHUB_TOKEN ?: getenv('GITHUB_TOKEN');
+    
+    if (!$github_token || $github_token === 'ghp_your_token_here') {
+        error_log("No GitHub token available, falling back to REST API (public only)");
+        return getGitHubDataREST($username);
+    }
+    
+    $today = new DateTime();
+    $oneYearAgo = clone $today;
+    $oneYearAgo->sub(new DateInterval('P1Y'));
+    
+    $query = '
+    query($username: String!) {
+      user(login: $username) {
+        contributionsCollection {
+          contributionCalendar {
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+              }
+            }
+          }
+        }
+      }
+    }';
+    
+    $variables = [
+        'username' => $username
+    ];
+    
+    $data = fetchGitHubGraphQL($query, $variables);
+    
+    if ($data && isset($data['data']['user']['contributionsCollection']['contributionCalendar']['weeks'])) {
+        $contributions = [];
+        $weeks = $data['data']['user']['contributionsCollection']['contributionCalendar']['weeks'];
+        
+        foreach ($weeks as $week) {
+            foreach ($week['contributionDays'] as $day) {
+                $contributions[$day['date']] = $day['contributionCount'];
+            }
+        }
+        
+        return $contributions;
+    }
+    
+    error_log("GraphQL failed, falling back to REST API");
+    return getGitHubDataREST($username);
+}
+
+// Función para obtener eventos de GitHub usando REST API (solo públicos)
+function getGitHubDataREST($username) {
     $contributions = [];
     $today = new DateTime();
     $oneYearAgo = clone $today;
@@ -149,6 +201,67 @@ function getGitHubData($username) {
     }
     
     return $contributions;
+}
+
+function fetchGitHubGraphQL($query, $variables = []) {
+    $github_token = GITHUB_TOKEN ?: getenv('GITHUB_TOKEN');
+    
+    if (!$github_token || $github_token === 'ghp_your_token_here') {
+        return false;
+    }
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.github.com/graphql');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'GitHub-Calendar-Widget/1.0');
+    
+    $headers = [
+        'Authorization: Bearer ' . $github_token,
+        'Content-Type: application/json',
+        'User-Agent: GitHub-Calendar-Widget/1.0'
+    ];
+    
+    $payload = json_encode([
+        'query' => $query,
+        'variables' => $variables
+    ]);
+    
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+    
+    if ($error) {
+        error_log("GraphQL cURL Error: " . $error);
+        return false;
+    }
+    
+    if ($httpCode === 403) {
+        error_log("GitHub GraphQL Rate Limited: HTTP " . $httpCode);
+        error_log("Response: " . $response);
+        return 'RATE_LIMITED';
+    }
+    
+    if ($httpCode !== 200) {
+        error_log("GitHub GraphQL Error: HTTP " . $httpCode);
+        error_log("Response: " . $response);
+        return false;
+    }
+    
+    $data = json_decode($response, true);
+    
+    if (isset($data['errors'])) {
+        error_log("GraphQL Errors: " . json_encode($data['errors']));
+        return false;
+    }
+    
+    return $data ?: false;
 }
 
 function fetchGitHubAPI($url) {
@@ -221,8 +334,8 @@ try {
         echo json_encode(['error' => 'User not found or GitHub API unavailable']);
         exit;
     } else {
-        // Obtener contribuciones reales
-        $contributions = getGitHubData($username);
+        // Obtener contribuciones reales (incluye privadas si hay token)
+        $contributions = getGitHubContributionsGraphQL($username);
     }
     
     // Convertir a formato de semanas

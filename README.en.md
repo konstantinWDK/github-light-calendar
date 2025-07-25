@@ -1,7 +1,5 @@
 # GitHub Light Calendar
 
-[🇪🇸 Español](README.md) | 🇺🇸 English
-
 A lightweight, customizable GitHub contributions calendar widget that can be easily embedded into any website.
 
 ## 📁 Project Structure
@@ -34,6 +32,7 @@ github-light-calendar/
 - 🛡️ Rate limit protection with fallback
 - 🌐 CDN ready
 - 🔒 Secure token management
+- 🔐 **Private contributions support** (with proper token)
 
 ## 🚀 Quick Start
 
@@ -49,91 +48,40 @@ GitHubCalendar('#calendar', 'your-username', {
 </script>
 ```
 
-### Local Development Setup
+### Local Development
+```html
+<link rel="stylesheet" href="css/github-calendar.css">
+<div id="calendar"></div>
+<script src="src/github-calendar.js"></script>
+<script>
+GitHubCalendar('#calendar', 'your-username', {
+    proxy: 'server/github-proxy.php'
+});
+</script>
+```
 
-#### Prerequisites
-- PHP 7.0 or higher
-- Web server (Apache, Nginx, or local dev server)
-- Write permissions for cache directory
-
-#### Installation Steps
-1. **Clone or download the repository**
-   ```bash
-   git clone https://github.com/konstantinWDK/github-light-calendar.git
-   cd github-light-calendar
-   ```
-
-2. **Set up configuration**
-   ```bash
-   cp config/config.example.php config/config.php
-   ```
-
-3. **Create cache directory**
-   ```bash
-   mkdir -p cache
-   chmod 755 cache
-   ```
-
-4. **Configure your GitHub token (optional but recommended)**
-   Edit `config/config.php` and add your GitHub token:
-   ```php
-   define('GITHUB_TOKEN', 'ghp_your_actual_token_here');
-   ```
-
-5. **Local HTML usage**
-   ```html
-   <link rel="stylesheet" href="css/github-calendar.css">
-   <div id="calendar"></div>
-   <script src="src/github-calendar.js"></script>
-   <script>
-   GitHubCalendar('#calendar', 'your-username', {
-       proxy: 'server/github-proxy.php'
-   });
-   </script>
-   ```
-
-### 📋 Complete Live Example
+### 📋 Live Example
 
 ```html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Calendar - Example</title>
     <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
 </head>
 <body>
-    <h2>GitHub Contributions Calendar</h2>
-    <div id="calendar"></div>
+    <div id="github-calendar"></div>
     
     <script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
     <script>
-        GitHubCalendar('#calendar', 'KonstantinWDK', {
+        GitHubCalendar('#github-calendar', 'KonstantinWDK', {
             proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
             responsive: true,
-            tooltips: true,
-            summary_text: 'contributions in the last year'
+            tooltips: true
         });
     </script>
 </body>
 </html>
 ```
-
-### 🎯 Minimal Example (Copy & Paste)
-
-```html
-<link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
-<div id="calendar"></div>
-<script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
-<script>
-GitHubCalendar('#calendar', 'your-github-username', {
-    proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php'
-});
-</script>
-```
-
-**Just change `'your-github-username'` to your actual username!**
 
 ## 🔄 Migration from Previous Version
 
@@ -168,51 +116,26 @@ GitHubCalendar('#calendar', 'username', {
 
 ## ⚙️ Configuration
 
-### Server Configuration
-
-1. **Copy configuration file**
-   ```bash
-   cp config/config.example.php config/config.php
+1. Copy `config/config.example.php` to `config/config.php`
+2. Add your GitHub token:
+   ```php
+   define('GITHUB_TOKEN', 'your_github_token_here');
    ```
 
-2. **Configure GitHub Token (Optional but Recommended)**
-   
-   **Method 1: Configuration file (Recommended)**
-   Edit `config/config.php`:
+### 🔒 GitHub Token Setup (Required for Private Contributions)
+
+To display **private contributions** in your calendar:
+
+1. **Create a Personal Access Token** at https://github.com/settings/tokens
+2. **Select Scopes**:
+   - For public repositories only: No special scopes needed
+   - **For private contributions: Check `user` scope** ✅
+3. **Add token to config.php**:
    ```php
    define('GITHUB_TOKEN', 'ghp_your_actual_token_here');
    ```
-   
-   **Method 2: Environment variable**
-   ```bash
-   export GITHUB_TOKEN="ghp_your_actual_token_here"
-   ```
-   
-   **Method 3: .htaccess (Apache)**
-   ```apache
-   SetEnv GITHUB_TOKEN "ghp_your_actual_token_here"
-   ```
 
-3. **Other configuration options in config.php**
-   ```php
-   // Cache duration (default: 1 hour)
-   define('CACHE_DURATION', 3600);
-   
-   // API timeout (default: 10 seconds)
-   define('API_TIMEOUT', 10);
-   
-   // Debug mode (default: false)
-   define('DEBUG_MODE', false);
-   ```
-
-### How to Get GitHub Token
-
-1. Go to [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
-2. Click "Generate new token (classic)"
-3. Give it a name (e.g., "GitHub Calendar Widget")
-4. **No special permissions needed** (leave all checkboxes unchecked for public repos)
-5. Click "Generate token"
-6. Copy the generated token and add it to your configuration
+**Without a token with `user` scope, only public contributions will be displayed.**
 
 ### Configuration Options
 
@@ -254,19 +177,15 @@ GitHubCalendar('#calendar', 'KonstantinWDK');
 
 // With custom options
 GitHubCalendar('#calendar', 'KonstantinWDK', {
-  proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
+  proxy: 'https://your-domain.com/server/github-proxy.php',
   summary_text: 'commits this year',
   tooltips: true,
   responsive: true
 });
 
 // Multiple calendars
-GitHubCalendar('#calendar1', 'user1', { 
-  proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php' 
-});
-GitHubCalendar('#calendar2', 'user2', { 
-  proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php' 
-});
+GitHubCalendar('#calendar1', 'user1', { proxy: 'server/github-proxy.php' });
+GitHubCalendar('#calendar2', 'user2', { proxy: 'server/github-proxy.php' });
 ```
 
 ## API Methods
@@ -282,37 +201,18 @@ calendar.reload();
 calendar.destroy();
 ```
 
-## 📊 API Limits & Caching
+## 📊 API Limits & Data Access
 
-### GitHub API Rate Limits
-- **Without token**: 60 requests/hour per IP
-- **With token**: 5,000 requests/hour per token
-- **Automatic fallback**: Mock data when rate limited
+- **Without token**: 60 requests/hour, **public contributions only**
+- **With token (no `user` scope)**: 5,000 requests/hour, **public contributions only**
+- **With token (`user` scope)**: 5,000 requests/hour, **includes private contributions** ✅
+- **Automatic cache**: Reduces API calls significantly (1 hour cache)
 
-### Intelligent Caching System
-- **Cache duration**: 1 hour by default (configurable)
-- **Cache location**: `/cache/` directory 
-- **Cache format**: JSON files with MD5 hashed usernames
-- **Auto-cleanup**: Expired cache files are automatically refreshed
-- **Benefits**: 
-  - Dramatically reduces API calls
-  - Faster load times for repeat visits
-  - Better user experience during high traffic
+### 🔍 Data Sources:
+- **Public contributions**: REST API + Public events
+- **Private contributions**: GraphQL API (requires `user` scope token)
 
-### Fallback & Mock Data
-When GitHub API is unavailable or rate limited, the library automatically:
-- 🔄 Switches to realistic mock contribution data
-- 📊 Generates patterns based on typical developer activity
-- ⚡ Maintains calendar functionality without errors
-- 🎯 Shows weekday vs weekend activity patterns
-
-**Mock data features:**
-- Realistic contribution patterns (more activity on weekdays)
-- Random but believable contribution counts
-- Full year of data coverage
-- Seamless user experience
-
-## 🔍 Testing the Proxy
+## 🔍 Testing the proxy
 
 Test your proxy by visiting: `https://webdesignerk.com/g-calendar/server/github-proxy.php?username=KonstantinWDK`
 
@@ -362,62 +262,36 @@ The calendar uses CSS classes that you can customize:
 
 ## 🛠️ Troubleshooting
 
-### Common Issues & Solutions
+### Common Issues:
 
 **❌ Calendar not showing:**
-- ✅ Check if `id` matches selector (`#calendar` needs `id="calendar"`)
-- ✅ Verify proxy URL is accessible and returns JSON
-- ✅ Check browser console for JavaScript errors
-- ✅ Ensure CSS file is loaded properly
+- Check if `id` matches selector (`#calendar` needs `id="calendar"`)
+- Verify proxy URL is accessible
+- Check browser console for errors
 
 **❌ "Loading..." shows forever:**
-- ✅ Test proxy URL directly: `your-proxy.php?username=your-username`
-- ✅ Check server PHP version (7.0+ required)
-- ✅ Verify internet connection to GitHub API
-- ✅ Check PHP error logs for detailed information
+- Test proxy URL directly: `your-proxy.php?username=your-username`
+- Check server PHP version (7.0+ required)
+- Verify internet connection to GitHub API
 
-**❌ No data showing or empty calendar:**
-- ✅ Make sure username is correct and case-sensitive
-- ✅ Verify GitHub profile is public
-- ✅ Check if user has public contributions in the last year
-- ✅ Test with a known active GitHub user first
+**❌ No data showing:**
+- Make sure username is correct and case-sensitive
+- Check if GitHub profile is public
+- Verify user has public contributions
+- **For private contributions**: Ensure token has `user` scope
 
 **❌ CORS errors:**
-- ✅ Ensure you're using the proxy parameter correctly
-- ✅ Check proxy is on same domain or CORS configured
-- ✅ Verify proxy PHP file has proper CORS headers
+- Ensure you're using the proxy parameter
+- Check proxy is on same domain or CORS configured
 
-**❌ Server errors (500, 403):**
-- ✅ Check cache directory exists and has write permissions
-- ✅ Verify config.php exists and has valid syntax  
-- ✅ Check PHP error logs for specific error messages
-- ✅ Ensure GitHub token (if used) is valid
+### 🔍 Debug Mode:
 
-### 🔍 Debug & Testing
-
-**Enable debug mode in config.php:**
-```php
-define('DEBUG_MODE', true);
-```
-
-**Test proxy directly:**
-```bash
-curl "https://your-domain.com/server/github-proxy.php?username=octocat"
-```
-
-**JavaScript debugging:**
 ```javascript
 GitHubCalendar('#calendar', 'username', {
   proxy: 'your-proxy.php'
 }).catch(error => {
   console.error('Calendar Error:', error);
 });
-```
-
-**Check cache directory:**
-```bash
-ls -la cache/
-# Should show JSON files like: github_abc123.json
 ```
 
 ## 📄 License
@@ -438,22 +312,6 @@ We welcome contributions! Here's how you can help:
 ```bash
 git clone https://github.com/konstantinWDK/github-light-calendar.git
 cd github-light-calendar
-
-# Set up configuration
-cp config/config.example.php config/config.php
-
-# Create cache directory with proper permissions
-mkdir -p cache
-chmod 755 cache
-
-# Start local development server (PHP)
-php -S localhost:8000
-
-# Or using Python
-python -m http.server 8000
-
-# Test the library
-open http://localhost:8000/examples/
 ```
 
 ## 💬 Support & Community
@@ -465,4 +323,4 @@ open http://localhost:8000/examples/
 
 ---
 
-Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/)
+Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/g-calendar/)

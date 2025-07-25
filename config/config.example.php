@@ -8,10 +8,11 @@
  * 3. The config.php file is automatically ignored by git for security
  */
 
-// GitHub Personal Access Token (optional but recommended)
+// GitHub Personal Access Token (required for private contributions)
 // Create at: https://github.com/settings/tokens
-// No special permissions needed for public repositories
-// Leave empty to use without token (60 requests/hour limit)
+// For public repositories only: no special permissions needed
+// For private contributions: check 'user' scope when creating the token
+// Leave empty to use without token (60 requests/hour limit, public only)
 define('GITHUB_TOKEN', 'ghp_your_actual_token_here');
 
 // Cache settings
