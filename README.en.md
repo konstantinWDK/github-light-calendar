@@ -1,5 +1,7 @@
 # GitHub Light Calendar
 
+[🇪🇸 Español](README.md) | 🇺🇸 English
+
 A lightweight, customizable GitHub contributions calendar widget that can be easily embedded into any website.
 
 ## 📁 Project Structure

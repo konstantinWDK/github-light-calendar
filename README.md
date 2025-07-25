@@ -1,66 +1,68 @@
 # GitHub Light Calendar
 
-A lightweight, customizable GitHub contributions calendar widget that can be easily embedded into any website.
+🇪🇸 Español | [🇺🇸 English](README.en.md)
 
-## 📁 Project Structure
+Un widget ligero y personalizable del calendario de contribuciones de GitHub que puede ser fácilmente integrado en cualquier sitio web.
+
+## 📁 Estructura del Proyecto
 
 ```
 github-light-calendar/
-├── src/                    # Source JavaScript files
-│   └── github-calendar.js  # Main library file
-├── css/                    # Stylesheets
-│   └── github-calendar.css # Calendar styles
-├── server/                 # Backend proxy
-│   └── github-proxy.php    # GitHub API proxy
-├── config/                 # Configuration files
-│   ├── config.php          # Your private config (gitignored)
-│   └── config.example.php  # Example configuration
-├── examples/              # Usage examples
-│   ├── example.html       # Local development example
-│   └── cdn-example.html   # CDN usage example
-├── docs/                  # Documentation
-│   └── SETUP.md          # Setup instructions
-├── cache/                 # Auto-generated cache (gitignored)
-└── README.md             # This file
+├── src/                    # Archivos JavaScript fuente
+│   └── github-calendar.js  # Archivo principal de la librería
+├── css/                    # Hojas de estilo
+│   └── github-calendar.css # Estilos del calendario
+├── server/                 # Proxy del backend
+│   └── github-proxy.php    # Proxy de la API de GitHub
+├── config/                 # Archivos de configuración
+│   ├── config.php          # Tu configuración privada (ignorado por git)
+│   └── config.example.php  # Configuración de ejemplo
+├── examples/              # Ejemplos de uso
+│   ├── example.html       # Ejemplo para desarrollo local
+│   └── cdn-example.html   # Ejemplo de uso con CDN
+├── docs/                  # Documentación
+│   └── SETUP.md          # Instrucciones de configuración
+├── cache/                 # Cache auto-generado (ignorado por git)
+└── README.md             # Este archivo
 ```
 
-## ✨ Features
+## ✨ Características
 
-- 🎨 Lightweight and customizable
-- 📱 Responsive design
-- 🔄 Automatic caching (1 hour)
-- 🛡️ Rate limit protection with fallback
-- 🌐 CDN ready
-- 🔒 Secure token management
-- 🔐 **Private contributions support** (with proper token)
+- 🎨 Ligero y personalizable
+- 📱 Diseño responsivo
+- 🔄 Cache automático (1 hora)
+- 🛡️ Protección contra límites de API con fallback
+- 🌐 Listo para CDN
+- 🔒 Gestión segura de tokens
+- 🔐 **Soporte para contribuciones privadas** (con token apropiado)
 
-## 🚀 Quick Start
+## 🚀 Inicio Rápido
 
-### CDN Usage (Recommended)
+### Uso con CDN (Recomendado)
 ```html
 <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
 <div id="calendar"></div>
 <script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
 <script>
-GitHubCalendar('#calendar', 'your-username', {
+GitHubCalendar('#calendar', 'tu-usuario', {
     proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php'
 });
 </script>
 ```
 
-### Local Development
+### Desarrollo Local
 ```html
 <link rel="stylesheet" href="css/github-calendar.css">
 <div id="calendar"></div>
 <script src="src/github-calendar.js"></script>
 <script>
-GitHubCalendar('#calendar', 'your-username', {
+GitHubCalendar('#calendar', 'tu-usuario', {
     proxy: 'server/github-proxy.php'
 });
 </script>
 ```
 
-### 📋 Live Example
+### 📋 Ejemplo en Vivo
 
 ```html
 <!DOCTYPE html>
@@ -83,11 +85,11 @@ GitHubCalendar('#calendar', 'your-username', {
 </html>
 ```
 
-## 🔄 Migration from Previous Version
+## 🔄 Migración de Versión Anterior
 
-**OLD CDN URLs (deprecated):**
+**URLs CDN ANTIGUAS (obsoletas):**
 ```html
-<!-- ❌ OLD - Don't use these anymore -->
+<!-- ❌ ANTIGUAS - No usar más -->
 <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/github-calendar.min.css">
 <script src="https://webdesignerk.com/g-calendar/github-calendar.min.js"></script>
 <script>
@@ -97,9 +99,9 @@ GitHubCalendar('#calendar', 'username', {
 </script>
 ```
 
-**NEW CDN URLs (current):**
+**URLs CDN NUEVAS (actuales):**
 ```html
-<!-- ✅ NEW - Use these instead -->
+<!-- ✅ NUEVAS - Usar estas en su lugar -->
 <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
 <script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
 <script>
@@ -109,33 +111,33 @@ GitHubCalendar('#calendar', 'username', {
 </script>
 ```
 
-### Changes Made:
+### Cambios Realizados:
 - `github-calendar.min.css` → `css/github-calendar.css`
 - `github-calendar.min.js` → `src/github-calendar.js`  
 - `github-proxy.php` → `server/github-proxy.php`
 
-## ⚙️ Configuration
+## ⚙️ Configuración
 
-1. Copy `config/config.example.php` to `config/config.php`
-2. Add your GitHub token:
+1. Copia `config/config.example.php` a `config/config.php`
+2. Añade tu token de GitHub:
    ```php
-   define('GITHUB_TOKEN', 'your_github_token_here');
+   define('GITHUB_TOKEN', 'tu_token_github_aqui');
    ```
 
-### 🔒 GitHub Token Setup (Required for Private Contributions)
+### 🔒 Configuración del Token de GitHub (Requerido para Contribuciones Privadas)
 
-To display **private contributions** in your calendar:
+Para mostrar **contribuciones privadas** en tu calendario:
 
-1. **Create a Personal Access Token** at https://github.com/settings/tokens
-2. **Select Scopes**:
-   - For public repositories only: No special scopes needed
-   - **For private contributions: Check `user` scope** ✅
-3. **Add token to config.php**:
+1. **Crea un Personal Access Token** en https://github.com/settings/tokens
+2. **Selecciona Scopes**:
+   - Solo para repositorios públicos: No se necesitan scopes especiales
+   - **Para contribuciones privadas: Marca el scope `user`** ✅
+3. **Añade el token a config.php**:
    ```php
-   define('GITHUB_TOKEN', 'ghp_your_actual_token_here');
+   define('GITHUB_TOKEN', 'ghp_tu_token_real_aqui');
    ```
 
-**Without a token with `user` scope, only public contributions will be displayed.**
+**Sin un token con scope `user`, solo se mostrarán las contribuciones públicas.**
 
 ### Configuration Options
 
@@ -150,82 +152,82 @@ GitHubCalendar('#calendar', 'username', {
 });
 ```
 
-### 📋 Parameters
+### 📋 Parámetros
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `selector` | String/Element | ✅ Yes | CSS selector (`#id` or `.class`) or DOM element |
-| `username` | String | ✅ Yes | GitHub username (case-sensitive) |
-| `options` | Object | ❌ No | Configuration options |
+| Parámetro | Tipo | Requerido | Descripción |
+|-----------|------|-----------|-------------|
+| `selector` | String/Element | ✅ Sí | Selector CSS (`#id` o `.class`) o elemento DOM |
+| `username` | String | ✅ Sí | Nombre de usuario de GitHub (sensible a mayúsculas) |
+| `options` | Object | ❌ No | Opciones de configuración |
 
-### 🔧 Available Options
+### 🔧 Opciones Disponibles
 
-| Option | Type | Default | Required | Description |
+| Opción | Tipo | Por Defecto | Requerido | Descripción |
 |--------|------|---------|----------|-------------|
-| `responsive` | Boolean | `true` | ❌ | Enable responsive design |
-| `tooltips` | Boolean | `true` | ❌ | Show interactive tooltips on hover |
-| `summary_text` | String | `'contributions in the last year'` | ❌ | Custom summary text |
+| `responsive` | Boolean | `true` | ❌ | Habilitar diseño responsivo |
+| `tooltips` | Boolean | `true` | ❌ | Mostrar tooltips interactivos al pasar cursor |
+| `summary_text` | String | `'contributions in the last year'` | ❌ | Texto de resumen personalizado |
 | `global_stats` | Boolean | `true` | ❌ | Show total contributions count |
 | `cache` | Boolean | `true` | ❌ | Enable data caching |
 | `proxy` | String | `''` | ✅ **Yes** | Proxy URL (required for production) |
 
-### 💡 Usage Examples
+### 💡 Ejemplos de Uso
 
 ```javascript
-// Basic usage
+// Uso básico
 GitHubCalendar('#calendar', 'KonstantinWDK');
 
-// With custom options
+// Con opciones personalizadas
 GitHubCalendar('#calendar', 'KonstantinWDK', {
-  proxy: 'https://your-domain.com/server/github-proxy.php',
-  summary_text: 'commits this year',
+  proxy: 'https://tu-dominio.com/server/github-proxy.php',
+  summary_text: 'commits este año',
   tooltips: true,
   responsive: true
 });
 
-// Multiple calendars
-GitHubCalendar('#calendar1', 'user1', { proxy: 'server/github-proxy.php' });
-GitHubCalendar('#calendar2', 'user2', { proxy: 'server/github-proxy.php' });
+// Múltiples calendarios
+GitHubCalendar('#calendar1', 'usuario1', { proxy: 'server/github-proxy.php' });
+GitHubCalendar('#calendar2', 'usuario2', { proxy: 'server/github-proxy.php' });
 ```
 
-## API Methods
+## Métodos de la API
 
 ```javascript
-// Initialize calendar
-var calendar = GitHubCalendar(".calendar", "username", options);
+// Inicializar calendario
+var calendar = GitHubCalendar(".calendar", "usuario", options);
 
-// Reload the calendar data
+// Recargar los datos del calendario
 calendar.reload();
 
-// Destroy the calendar instance
+// Destruir la instancia del calendario
 calendar.destroy();
 ```
 
-## 📊 API Limits & Data Access
+## 📊 Límites de API y Acceso a Datos
 
-- **Without token**: 60 requests/hour, **public contributions only**
-- **With token (no `user` scope)**: 5,000 requests/hour, **public contributions only**
-- **With token (`user` scope)**: 5,000 requests/hour, **includes private contributions** ✅
-- **Automatic cache**: Reduces API calls significantly (1 hour cache)
+- **Sin token**: 60 peticiones/hora, **solo contribuciones públicas**
+- **Con token (sin scope `user`)**: 5,000 peticiones/hora, **solo contribuciones públicas**
+- **Con token (scope `user`)**: 5,000 peticiones/hora, **incluye contribuciones privadas** ✅
+- **Cache automático**: Reduce significativamente las llamadas a la API (cache de 1 hora)
 
-### 🔍 Data Sources:
-- **Public contributions**: REST API + Public events
-- **Private contributions**: GraphQL API (requires `user` scope token)
+### 🔍 Fuentes de Datos:
+- **Contribuciones públicas**: REST API + Eventos públicos
+- **Contribuciones privadas**: GraphQL API (requiere token con scope `user`)
 
-## 🔍 Testing the proxy
+## 🔍 Probando el proxy
 
-Test your proxy by visiting: `https://webdesignerk.com/g-calendar/server/github-proxy.php?username=KonstantinWDK`
+Prueba tu proxy visitando: `https://webdesignerk.com/g-calendar/server/github-proxy.php?username=KonstantinWDK`
 
-You should see JSON data with contribution information.
+Deberías ver datos JSON con información de contribuciones.
 
-## 📖 Documentation
+## 📖 Documentación
 
-- [Setup Guide](docs/SETUP.md) - Detailed setup instructions
-- [Examples](examples/) - Working examples
+- [Guía de Configuración](docs/SETUP.md) - Instrucciones detalladas de configuración
+- [Ejemplos](examples/) - Ejemplos funcionales
 
-## 🎨 Custom Styling
+## 🎨 Estilos Personalizados
 
-The calendar uses CSS classes that you can customize:
+El calendario usa clases CSS que puedes personalizar:
 
 ```css
 .github-calendar {
