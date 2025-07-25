@@ -465,4 +465,4 @@ open http://localhost:8000/examples/
 
 ---
 
-Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/g-calendar/)
+Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/)
