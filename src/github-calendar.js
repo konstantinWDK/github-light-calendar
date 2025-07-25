@@ -73,7 +73,7 @@
       const cellSize = 10;
       const cellPadding = 2;
       const monthLabelHeight = 15;
-      const dayLabelWidth = 15;
+      const dayLabelWidth = 25;
       
       const width = weeks.length * (cellSize + cellPadding) + dayLabelWidth;
       const height = 7 * (cellSize + cellPadding) + monthLabelHeight;
@@ -100,7 +100,7 @@
       dayLabels.forEach((day, dayIndex) => {
         if (day) {
           const y = dayIndex * (cellSize + cellPadding) + monthLabelHeight + cellSize;
-          svg += `<text x="10" y="${y}" class="day" font-size="9" fill="#656d76">${day}</text>`;
+          svg += `<text x="5" y="${y}" class="day" font-size="9" fill="#656d76" text-anchor="start">${day}</text>`;
         }
       });
 
