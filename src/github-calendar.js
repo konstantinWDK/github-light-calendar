@@ -20,7 +20,10 @@
       summary_text: 'contributions in the last year',
       proxy: '',
       global_stats: true,
-      cache: true
+      cache: true,
+      template: null,
+      customTemplate: false,
+      templateVars: {}
     };
 
     const settings = Object.assign({}, defaults, options || {});
@@ -134,6 +137,128 @@
       return colors[level] || colors[0];
     }
 
+    function parseMarkdown(markdown) {
+      let html = markdown;
+      
+      // Headers
+      html = html.replace(/^### (.*$)/gim, '<h3 class="md-h3">$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2 class="md-h2">$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1 class="md-h1">$1</h1>');
+      
+      // Bold
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="md-bold">$1</strong>');
+      
+      // Italic
+      html = html.replace(/\*(.*?)\*/g, '<em class="md-italic">$1</em>');
+      
+      // Links
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="md-link">$1</a>');
+      
+      // Line breaks
+      html = html.replace(/\n/g, '<br>');
+      
+      // Lists
+      html = html.replace(/^\- (.*$)/gim, '<li class="md-list-item">$1</li>');
+      html = html.replace(/(<li class="md-list-item">.*<\/li>)/s, '<ul class="md-list">$1</ul>');
+      
+      return html;
+    }
+
+    function replaceTemplateVariables(template, data) {
+      const totalContributions = data.weeks.reduce((total, week) => {
+        return total + week.days.reduce((weekTotal, day) => weekTotal + day.count, 0);
+      }, 0);
+
+      const currentStreak = calculateCurrentStreak(data);
+      const longestStreak = calculateLongestStreak(data);
+      const averagePerDay = Math.round(totalContributions / 365 * 10) / 10;
+      
+      const mostActiveDay = findMostActiveDay(data);
+      const thisYear = new Date().getFullYear();
+      
+      const variables = {
+        '{{username}}': username,
+        '{{totalContributions}}': totalContributions,
+        '{{currentStreak}}': currentStreak,
+        '{{longestStreak}}': longestStreak,
+        '{{averagePerDay}}': averagePerDay,
+        '{{mostActiveDay}}': mostActiveDay,
+        '{{year}}': thisYear,
+        '{{summaryText}}': settings.summary_text,
+        ...settings.templateVars
+      };
+
+      let result = template;
+      for (const [variable, value] of Object.entries(variables)) {
+        result = result.replace(new RegExp(variable.replace(/[{}]/g, '\\$&'), 'g'), value);
+      }
+      
+      return result;
+    }
+
+    function calculateCurrentStreak(data) {
+      const allDays = [];
+      data.weeks.forEach(week => {
+        week.days.forEach(day => allDays.push(day));
+      });
+      
+      let streak = 0;
+      for (let i = allDays.length - 1; i >= 0; i--) {
+        if (allDays[i].count > 0) {
+          streak++;
+        } else {
+          break;
+        }
+      }
+      return streak;
+    }
+
+    function calculateLongestStreak(data) {
+      const allDays = [];
+      data.weeks.forEach(week => {
+        week.days.forEach(day => allDays.push(day));
+      });
+      
+      let longestStreak = 0;
+      let currentStreak = 0;
+      
+      allDays.forEach(day => {
+        if (day.count > 0) {
+          currentStreak++;
+          longestStreak = Math.max(longestStreak, currentStreak);
+        } else {
+          currentStreak = 0;
+        }
+      });
+      
+      return longestStreak;
+    }
+
+    function findMostActiveDay(data) {
+      let maxCount = 0;
+      let mostActiveDate = '';
+      
+      data.weeks.forEach(week => {
+        week.days.forEach(day => {
+          if (day.count > maxCount) {
+            maxCount = day.count;
+            mostActiveDate = day.date;
+          }
+        });
+      });
+      
+      if (mostActiveDate) {
+        const date = new Date(mostActiveDate);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+      
+      return 'No contributions yet';
+    }
+
     function createLegend() {
       return `
         <div class="github-calendar-legend">
@@ -148,6 +273,21 @@
           <span class="github-calendar-legend-text">More</span>
         </div>
       `;
+    }
+
+    async function loadTemplate(templatePath) {
+      if (!templatePath) return null;
+      
+      try {
+        const response = await fetch(templatePath);
+        if (!response.ok) {
+          throw new Error(`Failed to load template: ${response.status}`);
+        }
+        return await response.text();
+      } catch (error) {
+        console.warn('Failed to load template:', error);
+        return null;
+      }
     }
 
     function generateMockData() {
@@ -232,26 +372,50 @@
       });
     }
 
-    function render(data) {
+    async function render(data, template = null) {
       contributionData = data;
       
       const totalContributions = data.weeks.reduce((total, week) => {
         return total + week.days.reduce((weekTotal, day) => weekTotal + day.count, 0);
       }, 0);
 
-      const calendarHTML = `
-        <div class="github-calendar">
-          <div class="github-calendar-graph">
-            ${settings.global_stats ? `<div class="github-calendar-graph-title">
-              ${totalContributions} ${settings.summary_text}
-            </div>` : ''}
+      let calendarHTML;
+      
+      if (settings.customTemplate && template) {
+        const processedTemplate = replaceTemplateVariables(template, data);
+        const calendarSVG = createCalendarSVG(data);
+        const legend = createLegend();
+        
+        const templateWithPlaceholders = processedTemplate
+          .replace('{{calendar}}', calendarSVG)
+          .replace('{{legend}}', legend);
+        
+        calendarHTML = `
+          <div class="github-calendar github-calendar-template">
+            <div class="github-calendar-markdown">
+              ${parseMarkdown(templateWithPlaceholders)}
+            </div>
             <div class="github-calendar-graph-container">
-              ${createCalendarSVG(data)}
-              ${createLegend()}
+              ${calendarSVG}
+              ${legend}
             </div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        calendarHTML = `
+          <div class="github-calendar">
+            <div class="github-calendar-graph">
+              ${settings.global_stats ? `<div class="github-calendar-graph-title">
+                ${totalContributions} ${settings.summary_text}
+              </div>` : ''}
+              <div class="github-calendar-graph-container">
+                ${createCalendarSVG(data)}
+                ${createLegend()}
+              </div>
+            </div>
+          </div>
+        `;
+      }
 
       selector.innerHTML = calendarHTML;
       createTooltip();
@@ -268,16 +432,38 @@
     }
 
     // Initialize
-    fetchContributions(username)
-      .then(render)
-      .catch(handleError);
+    async function initialize() {
+      try {
+        const data = await fetchContributions(username);
+        
+        if (settings.customTemplate && settings.template) {
+          const template = await loadTemplate(settings.template);
+          await render(data, template);
+        } else {
+          await render(data);
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    }
+    
+    initialize();
 
     // Return public API
     return {
-      reload: function() {
-        fetchContributions(username)
-          .then(render)
-          .catch(handleError);
+      reload: async function() {
+        try {
+          const data = await fetchContributions(username);
+          
+          if (settings.customTemplate && settings.template) {
+            const template = await loadTemplate(settings.template);
+            await render(data, template);
+          } else {
+            await render(data);
+          }
+        } catch (error) {
+          handleError(error);
+        }
       },
       
       destroy: function() {

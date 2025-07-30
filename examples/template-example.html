@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Calendar - Template Example</title>
+    <link rel="stylesheet" href="../css/github-calendar.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+        }
+        
+        .example-section {
+            margin-bottom: 60px;
+            padding: 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            background: #f6f8fa;
+        }
+        
+        .example-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #24292f;
+        }
+        
+        .example-description {
+            color: #656d76;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub Calendar - Template Examples</h1>
+    <p>Esta página demuestra las diferentes plantillas Markdown disponibles para personalizar tu GitHub Calendar.</p>
+
+    <div class="example-section">
+        <div class="example-title">📊 GitHub Profile Template</div>
+        <div class="example-description">
+            Una plantilla completa estilo perfil de GitHub con estadísticas detalladas.
+        </div>
+        <div id="calendar-profile"></div>
+    </div>
+
+    <div class="example-section">
+        <div class="example-title">📈 Dashboard Template</div>
+        <div class="example-description">
+            Una plantilla tipo dashboard con métricas avanzadas y emojis.
+        </div>
+        <div id="calendar-dashboard"></div>
+    </div>
+
+    <div class="example-section">
+        <div class="example-title">🎯 Minimal Template</div>
+        <div class="example-description">
+            Una plantilla minimalista para integración discreta.
+        </div>
+        <div id="calendar-minimal"></div>
+    </div>
+
+    <div class="example-section">
+        <div class="example-title">⚙️ Default (Sin Template)</div>
+        <div class="example-description">
+            El diseño original sin plantilla para comparación.
+        </div>
+        <div id="calendar-default"></div>
+    </div>
+
+    <script src="../src/github-calendar.js"></script>
+    <script>
+        // GitHub Profile Template
+        GitHubCalendar('#calendar-profile', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php',
+            customTemplate: true,
+            template: '../templates/github-profile.md',
+            templateVars: {
+                '{{customMessage}}': 'Keep coding!'
+            }
+        });
+
+        // Dashboard Template
+        GitHubCalendar('#calendar-dashboard', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php',
+            customTemplate: true,
+            template: '../templates/dashboard.md'
+        });
+
+        // Minimal Template
+        GitHubCalendar('#calendar-minimal', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php',
+            customTemplate: true,
+            template: '../templates/minimal.md'
+        });
+
+        // Default (without template)
+        GitHubCalendar('#calendar-default', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php'
+        });
+    </script>
+</body>
+</html>

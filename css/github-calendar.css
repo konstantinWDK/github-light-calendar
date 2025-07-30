@@ -135,3 +135,131 @@
     height: 6px;
   }
 }
+
+/* Markdown Template Styles */
+.github-calendar-template {
+  max-width: none;
+}
+
+.github-calendar-markdown {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.github-calendar-markdown .md-h1 {
+  color: #24292f;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  border-bottom: 1px solid #d1d9e0;
+  padding-bottom: 8px;
+}
+
+.github-calendar-markdown .md-h2 {
+  color: #24292f;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 24px 0 16px 0;
+  border-bottom: 1px solid #d1d9e0;
+  padding-bottom: 6px;
+}
+
+.github-calendar-markdown .md-h3 {
+  color: #24292f;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 20px 0 12px 0;
+}
+
+.github-calendar-markdown .md-bold {
+  font-weight: 600;
+  color: #24292f;
+}
+
+.github-calendar-markdown .md-italic {
+  font-style: italic;
+  color: #656d76;
+}
+
+.github-calendar-markdown .md-link {
+  color: #0969da;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom-color 0.2s;
+}
+
+.github-calendar-markdown .md-link:hover {
+  border-bottom-color: #0969da;
+  text-decoration: none;
+}
+
+.github-calendar-markdown .md-list {
+  margin: 12px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.github-calendar-markdown .md-list-item {
+  margin: 6px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.github-calendar-markdown .md-list-item:before {
+  content: "•";
+  color: #656d76;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.github-calendar-markdown p {
+  margin: 12px 0;
+  color: #24292f;
+}
+
+.github-calendar-markdown blockquote {
+  margin: 16px 0;
+  padding: 0 16px;
+  border-left: 4px solid #d1d9e0;
+  color: #656d76;
+  font-style: italic;
+}
+
+/* Template specific spacing */
+.github-calendar-template .github-calendar-graph-container {
+  margin-top: 16px;
+}
+
+/* Responsive adjustments for templates */
+@media (max-width: 768px) {
+  .github-calendar-markdown .md-h1 {
+    font-size: 20px;
+  }
+  
+  .github-calendar-markdown .md-h2 {
+    font-size: 18px;
+  }
+  
+  .github-calendar-markdown .md-h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .github-calendar-markdown {
+    font-size: 13px;
+  }
+  
+  .github-calendar-markdown .md-h1 {
+    font-size: 18px;
+  }
+  
+  .github-calendar-markdown .md-h2 {
+    font-size: 16px;
+  }
+  
+  .github-calendar-markdown .md-h3 {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,5 @@
+**{{totalContributions}}** {{summaryText}}
+
+{{calendar}}
+
+{{legend}}

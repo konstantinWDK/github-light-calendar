@@ -12,12 +12,17 @@ github-light-calendar/
 │   └── github-calendar.js  # Archivo principal de la librería
 ├── css/                    # Hojas de estilo
 │   └── github-calendar.css # Estilos del calendario
+├── templates/              # Plantillas Markdown
+│   ├── github-profile.md   # Plantilla estilo GitHub Profile
+│   ├── dashboard.md        # Plantilla tipo dashboard
+│   └── minimal.md          # Plantilla minimalista
 ├── server/                 # Proxy del backend
 │   └── github-proxy.php    # Proxy de la API de GitHub
 ├── config/                 # Archivos de configuración
 │   ├── config.php          # Tu configuración privada (ignorado por git)
 │   └── config.example.php  # Configuración de ejemplo
 ├── examples/              # Ejemplos de uso
+│   ├── template-example.html # Ejemplo con plantillas
 │   ├── example.html       # Ejemplo para desarrollo local
 │   └── cdn-example.html   # Ejemplo de uso con CDN
 ├── docs/                  # Documentación
@@ -35,6 +40,7 @@ github-light-calendar/
 - 🌐 Listo para CDN
 - 🔒 Gestión segura de tokens
 - 🔐 **Soporte para contribuciones privadas** (con token apropiado)
+- 📝 **Plantillas Markdown personalizables** (estilo GitHub Profile)
 
 ## 🚀 Inicio Rápido
 
@@ -148,7 +154,10 @@ GitHubCalendar('#calendar', 'username', {
   summary_text: 'contributions in the last year',  // Custom summary text
   proxy: '',                 // Proxy URL for CORS handling (REQUIRED)
   global_stats: true,        // Show total contributions count
-  cache: true               // Enable caching
+  cache: true,               // Enable caching
+  customTemplate: false,     // Enable Markdown template mode
+  template: null,            // Path to Markdown template file
+  templateVars: {}           // Custom template variables
 });
 ```
 
@@ -170,6 +179,9 @@ GitHubCalendar('#calendar', 'username', {
 | `global_stats` | Boolean | `true` | ❌ | Show total contributions count |
 | `cache` | Boolean | `true` | ❌ | Enable data caching |
 | `proxy` | String | `''` | ✅ **Yes** | Proxy URL (required for production) |
+| `customTemplate` | Boolean | `false` | ❌ | Enable Markdown template mode |
+| `template` | String | `null` | ❌ | Path to Markdown template file |
+| `templateVars` | Object | `{}` | ❌ | Custom template variables |
 
 ### 💡 Ejemplos de Uso
 
@@ -188,7 +200,94 @@ GitHubCalendar('#calendar', 'KonstantinWDK', {
 // Múltiples calendarios
 GitHubCalendar('#calendar1', 'usuario1', { proxy: 'server/github-proxy.php' });
 GitHubCalendar('#calendar2', 'usuario2', { proxy: 'server/github-proxy.php' });
+
+// Con plantilla personalizada
+GitHubCalendar('#calendar', 'usuario', {
+  proxy: 'server/github-proxy.php',
+  customTemplate: true,
+  template: 'templates/github-profile.md',
+  templateVars: {
+    '{{customMessage}}': '¡Sigue programando!'
+  }
+});
 ```
+
+## 🎨 Plantillas Markdown
+
+**Nueva funcionalidad**: Personaliza la presentación de tu calendario usando plantillas Markdown, similar al estilo GitHub Profile.
+
+### 📝 Plantillas Incluidas
+
+#### 1. GitHub Profile (`templates/github-profile.md`)
+```javascript
+GitHubCalendar('#calendar', 'username', {
+  proxy: 'server/github-proxy.php',
+  customTemplate: true,
+  template: 'templates/github-profile.md'
+});
+```
+
+#### 2. Dashboard (`templates/dashboard.md`)
+```javascript
+GitHubCalendar('#calendar', 'username', {
+  proxy: 'server/github-proxy.php',
+  customTemplate: true,
+  template: 'templates/dashboard.md'
+});
+```
+
+#### 3. Minimal (`templates/minimal.md`)
+```javascript
+GitHubCalendar('#calendar', 'username', {
+  proxy: 'server/github-proxy.php',
+  customTemplate: true,
+  template: 'templates/minimal.md'
+});
+```
+
+### 🔧 Variables Disponibles
+
+Las plantillas pueden usar estas variables dinámicas:
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `{{username}}` | Nombre de usuario de GitHub | `KonstantinWDK` |
+| `{{totalContributions}}` | Total de contribuciones del año | `1,234` |
+| `{{currentStreak}}` | Racha actual de días activos | `15` |
+| `{{longestStreak}}` | Racha más larga registrada | `45` |
+| `{{averagePerDay}}` | Promedio de contribuciones por día | `3.4` |
+| `{{mostActiveDay}}` | Día con más actividad | `March 15, 2024` |
+| `{{year}}` | Año actual | `2024` |
+| `{{summaryText}}` | Texto de resumen configurado | `contributions in the last year` |
+| `{{calendar}}` | Inserta el calendario SVG | *SVG del calendario* |
+| `{{legend}}` | Inserta la leyenda de colores | *Leyenda HTML* |
+
+### ✏️ Crear Plantillas Personalizadas
+
+```markdown
+# Mi Calendario Personalizado
+
+**{{username}}** ha hecho **{{totalContributions}}** contribuciones este año.
+
+## Estadísticas
+- Racha actual: {{currentStreak}} días
+- Mejor racha: {{longestStreak}} días
+
+{{calendar}}
+{{legend}}
+
+*Actualizado automáticamente*
+```
+
+### 🎯 Elementos Markdown Soportados
+
+- **Encabezados**: `# ## ###`
+- **Texto en negrita**: `**texto**`
+- **Texto en cursiva**: `*texto*`
+- **Enlaces**: `[texto](url)`
+- **Listas**: `- elemento`
+- **Saltos de línea**
+- **Variables dinámicas**: `{{variable}}`
 
 ## Métodos de la API
 

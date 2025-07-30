@@ -35,6 +35,7 @@ github-light-calendar/
 - 🌐 CDN ready
 - 🔒 Secure token management
 - 🔐 **Private contributions support** (with proper token)
+- 📝 **Customizable Markdown templates** (GitHub Profile style)
 
 ## 🚀 Quick Start
 
