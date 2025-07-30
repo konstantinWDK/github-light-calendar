@@ -386,18 +386,22 @@
         const calendarSVG = createCalendarSVG(data);
         const legend = createLegend();
         
-        const templateWithPlaceholders = processedTemplate
-          .replace('{{calendar}}', calendarSVG)
-          .replace('{{legend}}', legend);
+        // Parse Markdown first, without the SVG elements
+        const templateWithoutSVG = processedTemplate
+          .replace('{{calendar}}', '[CALENDAR_PLACEHOLDER]')
+          .replace('{{legend}}', '[LEGEND_PLACEHOLDER]');
+        
+        const parsedMarkdown = parseMarkdown(templateWithoutSVG);
+        
+        // Then replace placeholders with actual SVG
+        const finalHTML = parsedMarkdown
+          .replace('[CALENDAR_PLACEHOLDER]', calendarSVG)
+          .replace('[LEGEND_PLACEHOLDER]', legend);
         
         calendarHTML = `
           <div class="github-calendar github-calendar-template">
             <div class="github-calendar-markdown">
-              ${parseMarkdown(templateWithPlaceholders)}
-            </div>
-            <div class="github-calendar-graph-container">
-              ${calendarSVG}
-              ${legend}
+              ${finalHTML}
             </div>
           </div>
         `;

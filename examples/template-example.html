@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Calendar - Template Example</title>
-    <link rel="stylesheet" href="../css/github-calendar.css">
+    <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -72,13 +72,13 @@
         <div id="calendar-default"></div>
     </div>
 
-    <script src="../src/github-calendar.js"></script>
+    <script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
     <script>
         // GitHub Profile Template
         GitHubCalendar('#calendar-profile', 'KonstantinWDK', {
-            proxy: '../server/github-proxy.php',
+            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
             customTemplate: true,
-            template: '../templates/github-profile.md',
+            template: 'https://webdesignerk.com/g-calendar/templates/github-profile.md',
             templateVars: {
                 '{{customMessage}}': 'Keep coding!'
             }
@@ -86,21 +86,21 @@
 
         // Dashboard Template
         GitHubCalendar('#calendar-dashboard', 'KonstantinWDK', {
-            proxy: '../server/github-proxy.php',
+            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
             customTemplate: true,
-            template: '../templates/dashboard.md'
+            template: 'https://webdesignerk.com/g-calendar/templates/dashboard.md'
         });
 
         // Minimal Template
         GitHubCalendar('#calendar-minimal', 'KonstantinWDK', {
-            proxy: '../server/github-proxy.php',
+            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
             customTemplate: true,
-            template: '../templates/minimal.md'
+            template: 'https://webdesignerk.com/g-calendar/templates/minimal.md'
         });
 
         // Default (without template)
         GitHubCalendar('#calendar-default', 'KonstantinWDK', {
-            proxy: '../server/github-proxy.php'
+            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php'
         });
     </script>
 </body>

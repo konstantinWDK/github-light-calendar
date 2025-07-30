@@ -65,6 +65,8 @@ GitHubCalendar('#calendar', 'your-username', {
 
 ### 📋 Live Example
 
+**🎨 [View Markdown Templates Demo](https://webdesignerk.com/g-calendar/examples/template-example.html)** - Functional example showing all templates
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -317,13 +319,6 @@ git clone https://github.com/konstantinWDK/github-light-calendar.git
 cd github-light-calendar
 ```
 
-## 💬 Support & Community
-
-- 🐛 **Bug Reports**: [Create an issue](https://github.com/konstantinWDK/github-light-calendar/issues)
-- 💡 **Feature Requests**: [Create an issue](https://github.com/konstantinWDK/github-light-calendar/issues)
-- 📧 **Contact**: [WebDesignerK](https://webdesignerk.com)
-- 🌟 **Give us a star** if this project helped you!
-
 ---
 
-Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/g-calendar/)
+Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/g-calendar/examples/template-example.html)

@@ -70,6 +70,8 @@ GitHubCalendar('#calendar', 'tu-usuario', {
 
 ### 📋 Ejemplo en Vivo
 
+**🎨 [Ver Demo con Plantillas Markdown](https://webdesignerk.com/g-calendar/examples/template-example.html)** - Ejemplo funcional mostrando todas las plantillas
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -176,8 +178,8 @@ GitHubCalendar('#calendar', 'username', {
 | `responsive` | Boolean | `true` | ❌ | Habilitar diseño responsivo |
 | `tooltips` | Boolean | `true` | ❌ | Mostrar tooltips interactivos al pasar cursor |
 | `summary_text` | String | `'contributions in the last year'` | ❌ | Texto de resumen personalizado |
-| `global_stats` | Boolean | `true` | ❌ | Show total contributions count |
-| `cache` | Boolean | `true` | ❌ | Enable data caching |
+| `global_stats` | Boolean | `true` | ❌ | Mostrar contador total de contribuciones |
+| `cache` | Boolean | `true` | ❌ | Habilitar caché de datos |
 | `proxy` | String | `''` | ✅ **Yes** | Proxy URL (required for production) |
 | `customTemplate` | Boolean | `false` | ❌ | Enable Markdown template mode |
 | `template` | String | `null` | ❌ | Path to Markdown template file |
@@ -215,6 +217,8 @@ GitHubCalendar('#calendar', 'usuario', {
 ## 🎨 Plantillas Markdown
 
 **Nueva funcionalidad**: Personaliza la presentación de tu calendario usando plantillas Markdown, similar al estilo GitHub Profile.
+
+**🌟 [Ver Demo en Vivo](https://webdesignerk.com/g-calendar/examples/template-example.html)** - Experimenta con todas las plantillas disponibles
 
 ### 📝 Plantillas Incluidas
 
@@ -415,13 +419,6 @@ git clone https://github.com/konstantinWDK/github-light-calendar.git
 cd github-light-calendar
 ```
 
-## 💬 Support & Community
-
-- 🐛 **Bug Reports**: [Create an issue](https://github.com/konstantinWDK/github-light-calendar/issues)
-- 💡 **Feature Requests**: [Create an issue](https://github.com/konstantinWDK/github-light-calendar/issues)
-- 📧 **Contact**: [WebDesignerK](https://webdesignerk.com)
-- 🌟 **Give us a star** if this project helped you!
-
 ---
 
-Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Live Demo](https://webdesignerk.com/g-calendar/)
+Made with ❤️ by [WebDesignerK](https://webdesignerk.com) | [Demo en Vivo](https://webdesignerk.com/g-calendar/examples/template-example.html)
