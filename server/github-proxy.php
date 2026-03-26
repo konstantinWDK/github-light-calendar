@@ -32,14 +32,19 @@ error_log("Raw query string: " . $_SERVER['QUERY_STRING'] ?? 'none');
 if (!isset($_GET['username']) || empty($_GET['username'])) {
     http_response_code(400);
     echo json_encode([
-        'error' => 'Username required', 
-        'received_params' => $_GET,
-        'query_string' => $_SERVER['QUERY_STRING'] ?? 'none'
+        'error' => 'Username required'
     ]);
     exit;
 }
 
-$username = $_GET['username'];
+// Sanitize username (GitHub usernames only allow alphanumeric and single hyphens)
+$username = preg_replace('/[^a-zA-Z0-9\-]/', '', $_GET['username']);
+
+if (empty($username)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid username format']);
+    exit;
+}
 
 // Cache functions
 function getCacheFilePath($username) {
