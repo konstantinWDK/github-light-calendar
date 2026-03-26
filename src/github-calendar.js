@@ -14,10 +14,32 @@
       throw new Error('GitHub Calendar: Username is required');
     }
 
+    const translations = {
+      'en-US': {
+        summary: 'contributions in last year',
+        less: 'Less',
+        more: 'More',
+        loading: 'Loading contributions...',
+        error: 'Failed to load GitHub contributions for'
+      },
+      'es-ES': {
+        summary: 'contribuciones en el último año',
+        less: 'Menos',
+        more: 'Más',
+        loading: 'Cargando contribuciones...',
+        error: 'Error al cargar las contribuciones de'
+      }
+    };
+
+    const getTranslation = (key) => {
+      const lang = settings.locale.startsWith('es') ? 'es-ES' : 'en-US';
+      return translations[lang][key];
+    };
+
     const defaults = {
       responsive: true,
       tooltips: true,
-      summary_text: 'contributions in last year',
+      summary_text: null, // Will use translation if null
       proxy: '',
       global_stats: true,
       cache: true,
@@ -30,6 +52,11 @@
     };
 
     const settings = Object.assign({}, defaults, options || {});
+    
+    // Set default summary text if not provided
+    if (!settings.summary_text) {
+      settings.summary_text = getTranslation('summary');
+    }
     
     let contributionData = null;
     let tooltip = null;
@@ -280,7 +307,7 @@
     function createLegend() {
       return `
         <div class="github-calendar-legend">
-          <span class="github-calendar-legend-text">Less</span>
+          <span class="github-calendar-legend-text">${getTranslation('less')}</span>
           <div class="github-calendar-legend-squares">
             <div class="github-calendar-square github-calendar-square-0"></div>
             <div class="github-calendar-square github-calendar-square-1"></div>
@@ -288,7 +315,7 @@
             <div class="github-calendar-square github-calendar-square-3"></div>
             <div class="github-calendar-square github-calendar-square-4"></div>
           </div>
-          <span class="github-calendar-legend-text">More</span>
+          <span class="github-calendar-legend-text">${getTranslation('more')}</span>
         </div>
       `;
     }
@@ -343,7 +370,7 @@
 
     function fetchContributions(username) {
       return new Promise((resolve, reject) => {
-        selector.innerHTML = '<div class="github-calendar-loading">Loading contributions...</div>';
+        selector.innerHTML = `<div class="github-calendar-loading">${getTranslation('loading')}</div>`;
         
         // Try to fetch real data from proxy first
         if (settings.proxy) {
@@ -459,7 +486,7 @@
     function handleError(error) {
       selector.innerHTML = `
         <div class="github-calendar-error">
-          Failed to load GitHub contributions for ${username}
+          ${getTranslation('error')} ${username}
         </div>
       `;
       console.error('GitHub Calendar Error:', error);
