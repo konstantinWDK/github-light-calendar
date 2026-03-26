@@ -1,6 +1,61 @@
+:root {
+  --color-calendar-graph-day-L0-bg: #ebedf0;
+  --color-calendar-graph-day-L1-bg: #9be9a8;
+  --color-calendar-graph-day-L2-bg: #40c463;
+  --color-calendar-graph-day-L3-bg: #30a14e;
+  --color-calendar-graph-day-L4-bg: #216e39;
+  --color-calendar-text: #24292f;
+  --color-calendar-text-secondary: #656d76;
+  --color-calendar-border: #d1d9e0;
+  --color-calendar-tooltip-bg: rgba(0, 0, 0, 0.85);
+  --color-calendar-tooltip-text: #ffffff;
+}
+
+/* GitHub Dark Theme (Optimized for dark backgrounds) */
+.github-calendar-theme-dark {
+  --color-calendar-graph-day-L0-bg: #161b22; /* Very dark for zero contributions */
+  --color-calendar-graph-day-L1-bg: #0e4429;
+  --color-calendar-graph-day-L2-bg: #006d32;
+  --color-calendar-graph-day-L3-bg: #26a641;
+  --color-calendar-graph-day-L4-bg: #39d353;
+  --color-calendar-text: #f0f6fc;
+  --color-calendar-text-secondary: #8b949e;
+  --color-calendar-border: #30363d;
+}
+
+/* Winter Theme */
+.github-calendar-theme-winter {
+  --color-calendar-graph-day-L0-bg: #ebedf0;
+  --color-calendar-graph-day-L1-bg: #90d7ff;
+  --color-calendar-graph-day-L2-bg: #60c0ff;
+  --color-calendar-graph-day-L3-bg: #30a0ff;
+  --color-calendar-graph-day-L4-bg: #0070f3;
+}
+
+/* Halloween Theme */
+.github-calendar-theme-halloween {
+  --color-calendar-graph-day-L0-bg: #ebedf0;
+  --color-calendar-graph-day-L1-bg: #ffee4a;
+  --color-calendar-graph-day-L2-bg: #ffc501;
+  --color-calendar-graph-day-L3-bg: #fe9600;
+  --color-calendar-graph-day-L4-bg: #03001c;
+}
+
+/* Orange Dark Theme */
+.github-calendar-theme-orange {
+  --color-calendar-graph-day-L0-bg: #161b22;
+  --color-calendar-graph-day-L1-bg: #3a2015;
+  --color-calendar-graph-day-L2-bg: #6a331a;
+  --color-calendar-graph-day-L3-bg: #9f4a21;
+  --color-calendar-graph-day-L4-bg: #ff6b35;
+  --color-calendar-text: #f0f6fc;
+  --color-calendar-text-secondary: #8b949e;
+  --color-calendar-border: #30363d;
+}
+
 .github-calendar {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-  color: #24292f;
+  color: var(--color-calendar-text);
   font-size: 14px;
 }
 
@@ -12,7 +67,7 @@
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 20px;
-  color: #24292f;
+  color: var(--color-calendar-text);
 }
 
 .github-calendar-graph-container {
@@ -31,7 +86,7 @@
   justify-content: center;
   margin-top: 8px;
   font-size: 11px;
-  color: #656d76;
+  color: var(--color-calendar-text-secondary);
 }
 
 .github-calendar-legend-text {
@@ -50,29 +105,22 @@
   border-radius: 2px;
 }
 
-.github-calendar-square-0 {
-  background-color: #ebedf0;
-}
-
-.github-calendar-square-1 {
-  background-color: #9be9a8;
-}
-
-.github-calendar-square-2 {
-  background-color: #40c463;
-}
-
-.github-calendar-square-3 {
-  background-color: #30a14e;
-}
-
-.github-calendar-square-4 {
-  background-color: #216e39;
-}
+.github-calendar-square-0 { background-color: var(--color-calendar-graph-day-L0-bg); }
+.github-calendar-square-1 { background-color: var(--color-calendar-graph-day-L1-bg); }
+.github-calendar-square-2 { background-color: var(--color-calendar-graph-day-L2-bg); }
+.github-calendar-square-3 { background-color: var(--color-calendar-graph-day-L3-bg); }
+.github-calendar-square-4 { background-color: var(--color-calendar-graph-day-L4-bg); }
 
 .github-calendar-day {
   cursor: pointer;
+  fill: var(--color-calendar-graph-day-L0-bg); /* Default fill */
+  transition: transform 0.1s ease, filter 0.1s ease;
 }
+
+.github-calendar-day.github-calendar-square-1 { fill: var(--color-calendar-graph-day-L1-bg); }
+.github-calendar-day.github-calendar-square-2 { fill: var(--color-calendar-graph-day-L2-bg); }
+.github-calendar-day.github-calendar-square-3 { fill: var(--color-calendar-graph-day-L3-bg); }
+.github-calendar-day.github-calendar-square-4 { fill: var(--color-calendar-graph-day-L4-bg); }
 
 .github-calendar-day:hover {
   stroke: #000;
@@ -82,13 +130,14 @@
 .github-calendar-tooltip {
   position: absolute;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.85);
-  color: white;
+  background: var(--color-calendar-tooltip-bg);
+  color: var(--color-calendar-tooltip-text);
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 12px;
   pointer-events: none;
   white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .github-calendar-loading {
@@ -221,9 +270,30 @@
 .github-calendar-markdown blockquote {
   margin: 16px 0;
   padding: 0 16px;
-  border-left: 4px solid #d1d9e0;
-  color: #656d76;
+  border-left: 4px solid var(--color-calendar-border);
+  color: var(--color-calendar-text-secondary);
   font-style: italic;
+}
+
+.github-calendar-markdown .md-code {
+  background-color: var(--color-calendar-graph-day-bg);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 85%;
+}
+
+.github-calendar-markdown .md-img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.github-calendar-markdown .md-hr {
+  height: 1px;
+  background-color: var(--color-calendar-border);
+  border: none;
+  margin: 24px 0;
 }
 
 /* Template specific spacing */

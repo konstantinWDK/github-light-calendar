@@ -3,104 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Calendar - Template Example</title>
-    <link rel="stylesheet" href="https://webdesignerk.com/g-calendar/css/github-calendar.css">
+    <title>GitHub Calendar - New Features Showcase</title>
+    <link rel="stylesheet" href="../css/github-calendar.css">
     <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #24292f;
+            --border-color: #e1e4e8;
+            --section-bg: #f6f8fa;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 20px;
-            background: #ffffff;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
         }
         
-        .example-section {
-            margin-bottom: 60px;
-            padding: 20px;
-            border: 1px solid #e1e4e8;
-            border-radius: 8px;
-            background: #f6f8fa;
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        .example-card {
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--section-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .example-card:hover {
+            transform: translateY(-2px);
         }
         
         .example-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #24292f;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .example-description {
             color: #656d76;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
             margin-bottom: 20px;
-            font-size: 14px;
+        }
+
+        .theme-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .theme-btn.active {
+            background: #24292f;
+            color: white;
+            border-color: #24292f;
         }
     </style>
 </head>
 <body>
-    <h1>GitHub Calendar - Template Examples</h1>
-    <p>Esta página demuestra las diferentes plantillas Markdown disponibles para personalizar tu GitHub Calendar.</p>
-
-    <div class="example-section">
-        <div class="example-title">📊 GitHub Profile Template</div>
-        <div class="example-description">
-            Una plantilla completa estilo perfil de GitHub con estadísticas detalladas.
+    <h1>GitHub Calendar - New Features</h1>
+    
+    <div class="examples-grid">
+        <!-- New Features Showcase -->
+        <div class="example-card">
+            <div class="example-title">🎨 New Themes & Modes</div>
+            <div class="example-description">
+                Try the built-in themes: <strong>Light</strong>, <strong>Dark</strong>, <strong>Winter</strong>, or <strong>Halloween</strong>.
+            </div>
+            <div id="calendar-themes"></div>
+            <div style="margin-top: 20px; display: flex; gap: 10px;" id="theme-controls">
+                <button class="theme-btn active" data-theme="light">Light</button>
+                <button class="theme-btn" data-theme="dark">Dark</button>
+                <button class="theme-btn" data-theme="winter">Winter</button>
+                <button class="theme-btn" data-theme="halloween">Halloween</button>
+                <button class="theme-btn" data-theme="orange">Orange</button>
+            </div>
         </div>
-        <div id="calendar-profile"></div>
+
+        <div class="example-card">
+            <div class="example-title">🌍 Localization & Ranges</div>
+            <div class="example-description">
+                Support for <strong>Spanish</strong> (locale: 'es-ES') and a reduced <strong>6-month</strong> view.
+            </div>
+            <div id="calendar-localized"></div>
+        </div>
+
+        <div class="example-card">
+            <div class="example-title">📊 GitHub Profile (Template)</div>
+            <div class="example-description">
+                Full profile template with dynamic stats and enhanced Markdown support.
+            </div>
+            <div id="calendar-profile"></div>
+        </div>
+
+        <div class="example-card">
+            <div class="example-title">📈 Minimal View</div>
+            <div class="example-description">
+                Discreet integration for sidebars or footers.
+            </div>
+            <div id="calendar-minimal"></div>
+        </div>
     </div>
 
-    <div class="example-section">
-        <div class="example-title">📈 Dashboard Template</div>
-        <div class="example-description">
-            Una plantilla tipo dashboard con métricas avanzadas y emojis.
-        </div>
-        <div id="calendar-dashboard"></div>
-    </div>
-
-    <div class="example-section">
-        <div class="example-title">🎯 Minimal Template</div>
-        <div class="example-description">
-            Una plantilla minimalista para integración discreta.
-        </div>
-        <div id="calendar-minimal"></div>
-    </div>
-
-    <div class="example-section">
-        <div class="example-title">⚙️ Default (Sin Template)</div>
-        <div class="example-description">
-            El diseño original sin plantilla para comparación.
-        </div>
-        <div id="calendar-default"></div>
-    </div>
-
-    <script src="https://webdesignerk.com/g-calendar/src/github-calendar.js"></script>
+    <script src="../src/github-calendar.js"></script>
     <script>
-        // GitHub Profile Template
-        GitHubCalendar('#calendar-profile', 'KonstantinWDK', {
-            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
-            customTemplate: true,
-            template: 'https://webdesignerk.com/g-calendar/templates/github-profile.md',
-            templateVars: {
-                '{{customMessage}}': 'Keep coding!'
+        // Themes Showcase
+        let currentThemeCalendar = GitHubCalendar('#calendar-themes', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php',
+            theme: 'light'
+        });
+
+        document.getElementById('theme-controls').addEventListener('click', (e) => {
+            if (e.target.classList.contains('theme-btn')) {
+                const theme = e.target.getAttribute('data-theme');
+                const card = e.target.closest('.example-card');
+                
+                // Update active button
+                document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Toggle dark background for card if theme is dark
+                if (theme === 'dark' || theme === 'orange') {
+                    card.style.background = '#0d1117';
+                    card.style.borderColor = '#30363d';
+                } else {
+                    card.style.background = 'var(--section-bg)';
+                    card.style.borderColor = 'var(--border-color)';
+                }
+
+                // Reload calendar with new theme
+                currentThemeCalendar.destroy();
+                currentThemeCalendar = GitHubCalendar('#calendar-themes', 'KonstantinWDK', {
+                    proxy: '../server/github-proxy.php',
+                    theme: theme
+                });
             }
         });
 
-        // Dashboard Template
-        GitHubCalendar('#calendar-dashboard', 'KonstantinWDK', {
-            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
+        // Localized & Short Range
+        GitHubCalendar('#calendar-localized', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php',
+            locale: 'es-ES',
+            months: 6,
+            summary_text: 'contribuciones en los últimos 6 meses'
+        });
+
+        // Profile Template
+        GitHubCalendar('#calendar-profile', 'KonstantinWDK', {
+            proxy: '../server/github-proxy.php',
             customTemplate: true,
-            template: 'https://webdesignerk.com/g-calendar/templates/dashboard.md'
+            template: '../templates/github-profile.md',
+            templateVars: {
+                '{{customMessage}}': 'Keep coding with passion!'
+            }
         });
 
         // Minimal Template
         GitHubCalendar('#calendar-minimal', 'KonstantinWDK', {
-            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php',
+            proxy: '../server/github-proxy.php',
             customTemplate: true,
-            template: 'https://webdesignerk.com/g-calendar/templates/minimal.md'
-        });
-
-        // Default (without template)
-        GitHubCalendar('#calendar-default', 'KonstantinWDK', {
-            proxy: 'https://webdesignerk.com/g-calendar/server/github-proxy.php'
+            template: '../templates/minimal.md'
         });
     </script>
 </body>

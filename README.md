@@ -33,14 +33,17 @@ github-light-calendar/
 
 ## ✨ Características
 
-- 🎨 Ligero y personalizable
+- 🎨 **Temas Personalizados**: Light, Dark, Winter y Halloween
+- 🌍 **Localización**: Soporte para diferentes idiomas y formatos de fecha
+- 📅 **Rango de Fechas**: Controla cuántos meses mostrar
+- 📝 **Markdown Vitaminado**: Soporte para imágenes, código en línea y más
 - 📱 Diseño responsivo
 - 🔄 Cache automático (1 hora)
 - 🛡️ Protección contra límites de API con fallback
 - 🌐 Listo para CDN
 - 🔒 Gestión segura de tokens
-- 🔐 **Soporte para contribuciones privadas** (con token apropiado)
-- 📝 **Plantillas Markdown personalizables** (estilo GitHub Profile)
+- 🔐 **Soporte para contribuciones privadas**
+- 📝 **Plantillas Markdown personalizables**
 
 ## 🚀 Inicio Rápido
 
@@ -151,15 +154,18 @@ Para mostrar **contribuciones privadas** en tu calendario:
 
 ```javascript
 GitHubCalendar('#calendar', 'username', {
-  responsive: true,           // Enable responsive design
-  tooltips: true,            // Show tooltips on hover
-  summary_text: 'contributions in the last year',  // Custom summary text
-  proxy: '',                 // Proxy URL for CORS handling (REQUIRED)
-  global_stats: true,        // Show total contributions count
-  cache: true,               // Enable caching
-  customTemplate: false,     // Enable Markdown template mode
-  template: null,            // Path to Markdown template file
-  templateVars: {}           // Custom template variables
+  responsive: true,           // Habilitar diseño responsivo
+  tooltips: true,            // Mostrar tooltips al pasar el cursor
+  summary_text: 'contributions in last year',  // Texto de resumen
+  proxy: '',                 // URL del Proxy (REQUERIDO en producción)
+  global_stats: true,        // Mostrar estadísticas globales
+  cache: true,               // Habilitar caché
+  customTemplate: false,     // Habilitar modo plantilla Markdown
+  template: null,            // Ruta al archivo de plantilla
+  templateVars: {},          // Variables personalizadas para la plantilla
+  theme: 'light',            // Tema: 'light', 'dark', 'winter', 'halloween'
+  locale: 'es-ES',           // Idioma/Región para fechas (ej: 'en-US', 'es-ES')
+  months: 12                 // Número de meses a mostrar (1-12)
 });
 ```
 
@@ -176,14 +182,17 @@ GitHubCalendar('#calendar', 'username', {
 | Opción | Tipo | Por Defecto | Requerido | Descripción |
 |--------|------|---------|----------|-------------|
 | `responsive` | Boolean | `true` | ❌ | Habilitar diseño responsivo |
-| `tooltips` | Boolean | `true` | ❌ | Mostrar tooltips interactivos al pasar cursor |
-| `summary_text` | String | `'contributions in the last year'` | ❌ | Texto de resumen personalizado |
+| `tooltips` | Boolean | `true` | ❌ | Mostrar tooltips interactivos |
+| `summary_text` | String | `'contributions in last year'` | ❌ | Texto de resumen personalizado |
 | `global_stats` | Boolean | `true` | ❌ | Mostrar contador total de contribuciones |
 | `cache` | Boolean | `true` | ❌ | Habilitar caché de datos |
-| `proxy` | String | `''` | ✅ **Yes** | Proxy URL (required for production) |
-| `customTemplate` | Boolean | `false` | ❌ | Enable Markdown template mode |
-| `template` | String | `null` | ❌ | Path to Markdown template file |
-| `templateVars` | Object | `{}` | ❌ | Custom template variables |
+| `proxy` | String | `''` | ✅ **Sí** | URL del Proxy (requerido para producción) |
+| `theme` | String | `'light'` | ❌ | Tema: `light`, `dark`, `winter`, `halloween` |
+| `locale` | String | `'en-US'` | ❌ | Localización para fechas (ej: `es-ES`) |
+| `months` | Number | `12` | ❌ | Número de meses a mostrar (1-12) |
+| `customTemplate` | Boolean | `false` | ❌ | Habilitar modo plantilla Markdown |
+| `template` | String | `null` | ❌ | Ruta al archivo de plantilla Markdown |
+| `templateVars` | Object | `{}` | ❌ | Variables personalizadas para la plantilla |
 
 ### 💡 Ejemplos de Uso
 
@@ -191,19 +200,15 @@ GitHubCalendar('#calendar', 'username', {
 // Uso básico
 GitHubCalendar('#calendar', 'KonstantinWDK');
 
-// Con opciones personalizadas
+// Con tema oscuro y en español
 GitHubCalendar('#calendar', 'KonstantinWDK', {
-  proxy: 'https://tu-dominio.com/server/github-proxy.php',
-  summary_text: 'commits este año',
-  tooltips: true,
-  responsive: true
+  proxy: 'server/github-proxy.php',
+  theme: 'dark',
+  locale: 'es-ES',
+  months: 6 // Mostrar solo los últimos 6 meses
 });
 
-// Múltiples calendarios
-GitHubCalendar('#calendar1', 'usuario1', { proxy: 'server/github-proxy.php' });
-GitHubCalendar('#calendar2', 'usuario2', { proxy: 'server/github-proxy.php' });
-
-// Con plantilla personalizada
+// Con plantilla personalizada y variables
 GitHubCalendar('#calendar', 'usuario', {
   proxy: 'server/github-proxy.php',
   customTemplate: true,
@@ -288,8 +293,12 @@ Las plantillas pueden usar estas variables dinámicas:
 - **Encabezados**: `# ## ###`
 - **Texto en negrita**: `**texto**`
 - **Texto en cursiva**: `*texto*`
+- **Código en línea**: \`código\`
 - **Enlaces**: `[texto](url)`
+- **Imágenes**: `![alt](url)`
 - **Listas**: `- elemento`
+- **Citas**: `> cita`
+- **Líneas horizontales**: `---`
 - **Saltos de línea**
 - **Variables dinámicas**: `{{variable}}`
 

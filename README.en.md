@@ -28,14 +28,17 @@ github-light-calendar/
 
 ## ✨ Features
 
-- 🎨 Lightweight and customizable
+- 🎨 **Custom Themes**: Light, Dark, Winter and Halloween
+- 🌍 **Localization**: Support for different languages and date formats
+- 📅 **Date Range**: Control how many months to show (1-12)
+- 📝 **Enhanced Markdown**: Support for images, inline code, and more
 - 📱 Responsive design
 - 🔄 Automatic caching (1 hour)
 - 🛡️ Rate limit protection with fallback
 - 🌐 CDN ready
 - 🔒 Secure token management
-- 🔐 **Private contributions support** (with proper token)
-- 📝 **Customizable Markdown templates** (GitHub Profile style)
+- 🔐 **Private contributions support**
+- 📝 **Customizable Markdown templates**
 
 ## 🚀 Quick Start
 
@@ -148,10 +151,13 @@ To display **private contributions** in your calendar:
 GitHubCalendar('#calendar', 'username', {
   responsive: true,           // Enable responsive design
   tooltips: true,            // Show tooltips on hover
-  summary_text: 'contributions in the last year',  // Custom summary text
+  summary_text: 'contributions in last year',  // Custom summary text
   proxy: '',                 // Proxy URL for CORS handling (REQUIRED)
   global_stats: true,        // Show total contributions count
-  cache: true               // Enable caching
+  cache: true,               // Enable caching
+  theme: 'light',            // Theme: 'light', 'dark', 'winter', 'halloween'
+  locale: 'en-US',           // Language/Locale for dates (e.g., 'en-US', 'es-ES')
+  months: 12                 // Number of months to show (1-12)
 });
 ```
 
@@ -168,11 +174,14 @@ GitHubCalendar('#calendar', 'username', {
 | Option | Type | Default | Required | Description |
 |--------|------|---------|----------|-------------|
 | `responsive` | Boolean | `true` | ❌ | Enable responsive design |
-| `tooltips` | Boolean | `true` | ❌ | Show interactive tooltips on hover |
-| `summary_text` | String | `'contributions in the last year'` | ❌ | Custom summary text |
+| `tooltips` | Boolean | `true` | ❌ | Show interactive tooltips |
+| `summary_text` | String | `'contributions in last year'` | ❌ | Custom summary text |
 | `global_stats` | Boolean | `true` | ❌ | Show total contributions count |
 | `cache` | Boolean | `true` | ❌ | Enable data caching |
 | `proxy` | String | `''` | ✅ **Yes** | Proxy URL (required for production) |
+| `theme` | String | `'light'` | ❌ | Theme: `light`, `dark`, `winter`, `halloween` |
+| `locale` | String | `'en-US'` | ❌ | Locale for dates (e.g., `es-ES`) |
+| `months` | Number | `12` | ❌ | Number of months to show (1-12) |
 
 ### 💡 Usage Examples
 
@@ -180,12 +189,12 @@ GitHubCalendar('#calendar', 'username', {
 // Basic usage
 GitHubCalendar('#calendar', 'KonstantinWDK');
 
-// With custom options
+// With dark theme and Spanish locale
 GitHubCalendar('#calendar', 'KonstantinWDK', {
-  proxy: 'https://your-domain.com/server/github-proxy.php',
-  summary_text: 'commits this year',
-  tooltips: true,
-  responsive: true
+  proxy: 'server/github-proxy.php',
+  theme: 'dark',
+  locale: 'es-ES',
+  months: 6 // Show only last 6 months
 });
 
 // Multiple calendars

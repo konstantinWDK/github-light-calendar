@@ -17,13 +17,16 @@
     const defaults = {
       responsive: true,
       tooltips: true,
-      summary_text: 'contributions in the last year',
+      summary_text: 'contributions in last year',
       proxy: '',
       global_stats: true,
       cache: true,
       template: null,
       customTemplate: false,
-      templateVars: {}
+      templateVars: {},
+      theme: 'light',
+      locale: 'en-US',
+      months: 12
     };
 
     const settings = Object.assign({}, defaults, options || {});
@@ -46,7 +49,7 @@
       const rect = event.target.getBoundingClientRect();
       const count = data.count;
       const date = new Date(data.date);
-      const dateStr = date.toLocaleDateString('en-US', { 
+      const dateStr = date.toLocaleDateString(settings.locale, { 
         year: 'numeric', 
         month: 'short', 
         day: 'numeric' 
@@ -88,7 +91,7 @@
       weeks.forEach((week, weekIndex) => {
         if (week.days.length > 0) {
           const firstDay = new Date(week.days[0].date);
-          const monthName = firstDay.toLocaleDateString('en-US', { month: 'short' });
+          const monthName = firstDay.toLocaleDateString(settings.locale, { month: 'short' });
           
           if (monthName !== currentMonth && weekIndex % 4 === 0) {
             currentMonth = monthName;
@@ -99,11 +102,14 @@
       });
 
       // Day labels
-      const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+      const dayLabels = settings.locale.startsWith('es') 
+        ? ['', 'Lun', '', 'Mié', '', 'Vie', ''] 
+        : ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+      
       dayLabels.forEach((day, dayIndex) => {
         if (day) {
           const y = dayIndex * (cellSize + cellPadding) + monthLabelHeight + cellSize;
-          svg += `<text x="5" y="${y}" class="day" font-size="9" fill="#656d76" text-anchor="start">${day}</text>`;
+          svg += `<text x="5" y="${y}" class="day" font-size="9" fill="var(--color-calendar-text-secondary)" text-anchor="start">${day}</text>`;
         }
       });
 
@@ -145,6 +151,9 @@
       html = html.replace(/^## (.*$)/gim, '<h2 class="md-h2">$1</h2>');
       html = html.replace(/^# (.*$)/gim, '<h1 class="md-h1">$1</h1>');
       
+      // Images
+      html = html.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="md-img">');
+      
       // Bold
       html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="md-bold">$1</strong>');
       
@@ -154,12 +163,21 @@
       // Links
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="md-link">$1</a>');
       
-      // Line breaks
-      html = html.replace(/\n/g, '<br>');
+      // Inline Code
+      html = html.replace(/`(.*?)`/g, '<code class="md-code">$1</code>');
+      
+      // Blockquotes
+      html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+      
+      // Horizontal Rule
+      html = html.replace(/^---$/gim, '<hr class="md-hr">');
       
       // Lists
       html = html.replace(/^\- (.*$)/gim, '<li class="md-list-item">$1</li>');
-      html = html.replace(/(<li class="md-list-item">.*<\/li>)/s, '<ul class="md-list">$1</ul>');
+      html = html.replace(/(<li class="md-list-item">.*<\/li>)/s, match => `<ul class="md-list">${match}</ul>`);
+      
+      // Line breaks (only if not inside a tag already)
+      html = html.replace(/\n/g, '<br>');
       
       return html;
     }
@@ -293,11 +311,12 @@
     function generateMockData() {
       const weeks = [];
       const today = new Date();
-      const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+      const numMonths = settings.months || 12;
+      const startDate = new Date(today.getFullYear(), today.getMonth() - numMonths + 1, 1);
       
-      let currentDate = new Date(oneYearAgo);
+      let currentDate = new Date(startDate);
       
-      // Start from the beginning of the week
+      // Start from the beginning of the week (Sunday = 0)
       const dayOfWeek = currentDate.getDay();
       currentDate.setDate(currentDate.getDate() - dayOfWeek);
       
@@ -306,7 +325,7 @@
         
         for (let i = 0; i < 7; i++) {
           const dateStr = currentDate.toISOString().split('T')[0];
-          const count = Math.floor(Math.random() * 15); // Random contributions 0-14
+          const count = Math.floor(Math.random() * 15);
           
           week.days.push({
             date: dateStr,
@@ -336,6 +355,17 @@
               return response.json();
             })
             .then(data => {
+              // Filter data based on settings.months
+              if (settings.months < 12) {
+                const today = new Date();
+                const numMonths = settings.months;
+                const startDate = new Date(today.getFullYear(), today.getMonth() - numMonths + 1, 1);
+                const startDateStr = startDate.toISOString().split('T')[0];
+                
+                data.weeks = data.weeks.filter(week => {
+                  return week.days.some(day => day.date >= startDateStr);
+                });
+              }
               resolve(data);
             })
             .catch(error => {
@@ -399,7 +429,7 @@
           .replace('[LEGEND_PLACEHOLDER]', legend);
         
         calendarHTML = `
-          <div class="github-calendar github-calendar-template">
+          <div class="github-calendar github-calendar-template github-calendar-theme-${settings.theme}">
             <div class="github-calendar-markdown">
               ${finalHTML}
             </div>
@@ -407,7 +437,7 @@
         `;
       } else {
         calendarHTML = `
-          <div class="github-calendar">
+          <div class="github-calendar github-calendar-theme-${settings.theme}">
             <div class="github-calendar-graph">
               ${settings.global_stats ? `<div class="github-calendar-graph-title">
                 ${totalContributions} ${settings.summary_text}
